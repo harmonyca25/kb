@@ -6,136 +6,379 @@
   <title>Evolution of Insurance in Canada - HarmonyPlan Knowledge Base</title>
   <style>
     :root {
-      --primary: #1a202c;
-      --accent: #3182ce;
-      --background: #f7fafc;
+      --primary-color: #2c3e50;
+      --secondary-color: #3498db;
+      --accent-color: #e67e22;
+      --light-color: #f8f9fa;
+      --dark-color: #343a40;
+      --text-color: #444;
+      --white: #ffffff;
+      --shadow: 0 5px 15px rgba(0,0,0,0.1);
       --border: #e2e8f0;
-      --text-light: #718096;
+      --transition: all 0.3s ease;
     }
-    body {
+    
+    /* Logo styling */
+    .logo-text {
+      display: flex;
+      align-items: center;
+      font-size: 2.5rem;
+      letter-spacing: 0.5px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+    }
+    
+    .logo-harmony {
+      color: #34495e;
+      position: relative;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    }
+    
+    .logo-plan {
+      color: #e67e22;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .logo-harmony::after {
+      content: "";
+      display: inline-block;
+      width: 0.08em;
+    }
+    
+    * {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--background);
-      color: var(--primary);
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 2rem;
     }
-    h1, h2, h3 {
-      color: var(--accent);
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+      background-color: var(--white);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
     }
+    
+    .logo {
+      max-width: 250px;
+      height: auto;
+    }
+    
+    header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+      position: relative;
+      padding-bottom: 1rem;
+    }
+    
+    h1:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      margin-bottom: 2rem;
+    }
+    
+    .notification {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #ebf8ff;
+      border-left: 4px solid var(--secondary-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    
+    .notification p {
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    .notification ol {
+      padding-left: 1.5rem;
+    }
+    
+    .notification li {
+      margin-bottom: 0.5rem;
+    }
+    
     .panel {
       border: 1px solid var(--border);
       border-radius: 8px;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       overflow: hidden;
       background: white;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
     }
+    
+    .panel:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
     .panel-header {
-      background: var(--accent);
+      background: var(--primary-color);
       color: white;
-      padding: 1rem;
+      padding: 1.2rem;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+    
+    .panel-header::after {
+      content: '\f107';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      transition: var(--transition);
+    }
+    
+    .panel-header.active::after {
+      transform: rotate(180deg);
+    }
+    
     .panel-content {
-      padding: 1rem;
+      padding: 1.5rem;
       display: none;
-      line-height: 1.6;
+      line-height: 1.8;
+      border-top: 1px solid var(--border);
     }
+    
+    .panel-content p {
+      margin-bottom: 1rem;
+    }
+    
     footer {
       margin-top: 4rem;
+      padding: 2rem;
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    
+    footer h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.8rem;
+    }
+    
+    footer h3:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 2px;
+      background-color: var(--accent-color);
+    }
+    
+    footer ul {
+      padding-left: 1.5rem;
+    }
+    
+    footer li {
+      margin-bottom: 0.8rem;
+    }
+    
+    footer a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    footer a:hover {
+      color: var(--accent-color);
+      text-decoration: underline;
+    }
+    
+    .copyright {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
       font-size: 0.9rem;
       color: var(--text-light);
     }
-    a {
-      color: var(--accent);
+    
+    .copyright a {
+      color: var(--accent-color);
       text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+      
+      .panel-header {
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h1>Evolution of Insurance in Canada</h1>
-  <p>Documented by VA Graphics for HarmonyPlan.ca</p>
-
-  <div style="margin-bottom: 2rem; padding: 1rem; background: #ebf8ff; border-left: 4px solid #3182ce;">
-    <p><strong>Vipul of VA Graphics</strong> asked me to:</p>
-    <ol>
-      <li>Conduct detailed research on when insurance was introduced in Canada, what plans were launched initially, how insurance evolved decade-by-decade until 2025, and predict the future landscape up to 2030 including technology and regulatory trends.</li>
-      <li>Document this research fully into a knowledge base for the HarmonyPlan project, using plain HTML, CSS, and JS with collapsible panels for easier reading without omitting any content, adding references, and ending with a visionary future outlook signed off by Vipul Anand.</li>
-    </ol>
-  </div>
-
-  <!-- Panels Start -->
-  
-  <div class="panel">
-    <div class="panel-header">1840s–1930s: Birth of Canadian Insurance</div>
-    <div class="panel-content">
-      <p>The Canadian insurance industry began with Canada Life (1847), expanding with Sun Life (1865) and others. Early offerings focused on life and accident insurance. Social insurance started with the Old Age Pensions Act (1927), and hospital plans like Blue Cross began emerging in the 1930s.</p>
+  <div class="container">
+    <div class="logo-container">
+      <div class="logo-text">
+        <span class="logo-harmony">Harmony</span><span class="logo-plan">Plan</span>
+      </div>
     </div>
-  </div>
+    
+    <header>
+      <h1>Evolution of Insurance in Canada</h1>
+      <p class="subtitle">Documented by VA Graphics for HarmonyPlan.ca</p>
+    </header>
 
-  <div class="panel">
-    <div class="panel-header">1940s–1960s: Foundations of Public Healthcare</div>
-    <div class="panel-content">
-      <p>Canada introduced Unemployment Insurance (1940), Saskatchewan pioneered hospital insurance (1947), and the federal Hospital Insurance Act (1957) expanded public coverage nationwide. Medicare was born in the 1960s with the Medical Care Act (1966), and CPP/QPP established contributory pensions.</p>
+    <div class="notification">
+      <p><strong>Vipul of VA Graphics</strong> asked me to:</p>
+      <ol>
+        <li>Conduct detailed research on when insurance was introduced in Canada, what plans were launched initially, how insurance evolved decade-by-decade until 2025, and predict the future landscape up to 2030 including technology and regulatory trends.</li>
+        <li>Document this research fully into a knowledge base for the HarmonyPlan project, using plain HTML, CSS, and JS with collapsible panels for easier reading without omitting any content, adding references, and ending with a visionary future outlook signed off by Vipul Anand.</li>
+      </ol>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-header">1970s–1990s: Expansion and Globalization</div>
-    <div class="panel-content">
-      <p>The Guaranteed Income Supplement (GIS) boosted seniors' income. Private insurers grew living benefits, critical illness coverage, and digitalization began in the 1980s. The Canada Health Act (1984) consolidated public insurance. NAFTA and global competition reshaped the market in the 1990s.</p>
+    <!-- Panels Start -->
+    
+    <div class="panel">
+      <div class="panel-header">1840s–1930s: Birth of Canadian Insurance</div>
+      <div class="panel-content">
+        <p>The Canadian insurance industry began with Canada Life (1847), expanding with Sun Life (1865) and others. Early offerings focused on life and accident insurance. Social insurance started with the Old Age Pensions Act (1927), and hospital plans like Blue Cross began emerging in the 1930s.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-header">2000s–2025: Digital Health and Reform</div>
-    <div class="panel-content">
-      <p>Employers expanded extended health benefits. E-health, online insurance, and telemedicine gained traction. COVID-19 accelerated virtual healthcare. Canada began a pharmacare rollout in 2024. Insurers invest heavily in AI, data analytics, and digital platforms.</p>
+    <div class="panel">
+      <div class="panel-header">1940s–1960s: Foundations of Public Healthcare</div>
+      <div class="panel-content">
+        <p>Canada introduced Unemployment Insurance (1940), Saskatchewan pioneered hospital insurance (1947), and the federal Hospital Insurance Act (1957) expanded public coverage nationwide. Medicare was born in the 1960s with the Medical Care Act (1966), and CPP/QPP established contributory pensions.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-header">Evolution of Services: Government and Private</div>
-    <div class="panel-content">
-      <p>Life and health services expanded: group benefits, digital underwriting, wearable devices for wellness tracking. Government programs moved toward covering a broader array of healthcare services beyond hospitals and physicians. AI, customer-first digital services, and data-driven insurance define the new normal.</p>
+    <div class="panel">
+      <div class="panel-header">1970s–1990s: Expansion and Globalization</div>
+      <div class="panel-content">
+        <p>The Guaranteed Income Supplement (GIS) boosted seniors' income. Private insurers grew living benefits, critical illness coverage, and digitalization began in the 1980s. The Canada Health Act (1984) consolidated public insurance. NAFTA and global competition reshaped the market in the 1990s.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-header">Future Outlook to 2030: Technology and Regulation</div>
-    <div class="panel-content">
-      <p>Artificial Intelligence (AI) will dominate underwriting and service. Blockchain could automate health claims. Digital health integration (IoT, remote monitoring) will redefine policy structures. New privacy and AI regulations will protect consumers while encouraging innovation. Public healthcare will continue expanding beyond hospital services into pharmacare, dental, and mental health domains.</p>
+    <div class="panel">
+      <div class="panel-header">2000s–2025: Digital Health and Reform</div>
+      <div class="panel-content">
+        <p>Employers expanded extended health benefits. E-health, online insurance, and telemedicine gained traction. COVID-19 accelerated virtual healthcare. Canada began a pharmacare rollout in 2024. Insurers invest heavily in AI, data analytics, and digital platforms.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="panel">
-    <div class="panel-header">Wild Vision for the Future: Insurance Reimagined</div>
-    <div class="panel-content">
-      <p>Imagine insurance as a real-time life partner: smart health contracts updating dynamically with your daily habits, risks analyzed on the fly by AI assistants, premiums flexing automatically as you live. Personalized prevention plans crafted by your digital twin. Virtual healthcare pods in homes. Insurance no longer seen as a burden, but an empowering ally — a safety net interwoven with your life, personalized, predictive, and preventive. By 2040, perhaps "insurance" will have evolved into "life curation," blending finance, wellness, and risk navigation seamlessly, quietly securing lives in ways today's industry cannot yet fathom.</p>
+    <div class="panel">
+      <div class="panel-header">Evolution of Services: Government and Private</div>
+      <div class="panel-content">
+        <p>Life and health services expanded: group benefits, digital underwriting, wearable devices for wellness tracking. Government programs moved toward covering a broader array of healthcare services beyond hospitals and physicians. AI, customer-first digital services, and data-driven insurance define the new normal.</p>
+      </div>
     </div>
+
+    <div class="panel">
+      <div class="panel-header">Future Outlook to 2030: Technology and Regulation</div>
+      <div class="panel-content">
+        <p>Artificial Intelligence (AI) will dominate underwriting and service. Blockchain could automate health claims. Digital health integration (IoT, remote monitoring) will redefine policy structures. New privacy and AI regulations will protect consumers while encouraging innovation. Public healthcare will continue expanding beyond hospital services into pharmacare, dental, and mental health domains.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header">Wild Vision for the Future: Insurance Reimagined</div>
+      <div class="panel-content">
+        <p>Imagine insurance as a real-time life partner: smart health contracts updating dynamically with your daily habits, risks analyzed on the fly by AI assistants, premiums flexing automatically as you live. Personalized prevention plans crafted by your digital twin. Virtual healthcare pods in homes. Insurance no longer seen as a burden, but an empowering ally — a safety net interwoven with your life, personalized, predictive, and preventive. By 2040, perhaps "insurance" will have evolved into "life curation," blending finance, wellness, and risk navigation seamlessly, quietly securing lives in ways today's industry cannot yet fathom.</p>
+      </div>
+    </div>
+
+    <!-- Panels End -->
+
+    <footer>
+      <h3>References:</h3>
+      <ul>
+        <li><a href="https://www.canada.ca/en/health-canada/services/health-care-system/canada-health-care-system.html" target="_blank">Government of Canada - Health Care System</a></li>
+        <li><a href="https://www.canada.ca/en/services/benefits/publicpensions/cpp.html" target="_blank">Government of Canada - Canada Pension Plan</a></li>
+        <li><a href="https://www.deloitte.com/ca/en/industries/insurance.html" target="_blank">Deloitte Canada - Insurance Insights</a></li>
+        <li><a href="https://www.cihi.ca/en/" target="_blank">Canadian Institute for Health Information (CIHI)</a></li>
+        <li><a href="https://www.cafii.com/" target="_blank">Canadian Association of Financial Institutions in Insurance (CAFII)</a></li>
+      </ul>
+      <p class="copyright">Content researched and developed by <strong>Vipul Anand</strong> of <strong>VA Graphics</strong> for <a href="https://harmonyplan.ca" target="_blank">HarmonyPlan.ca</a> — 21st Century Expansion Initiative.</p>
+    </footer>
   </div>
-
-  <!-- Panels End -->
-
-  <footer>
-    <h3>References:</h3>
-    <ul>
-      <li><a href="https://www.canada.ca/en/health-canada/services/health-care-system/canada-health-care-system.html" target="_blank">Government of Canada - Health Care System</a></li>
-      <li><a href="https://www.canada.ca/en/services/benefits/publicpensions/cpp.html" target="_blank">Government of Canada - Canada Pension Plan</a></li>
-      <li><a href="https://www.deloitte.com/ca/en/industries/insurance.html" target="_blank">Deloitte Canada - Insurance Insights</a></li>
-      <li><a href="https://www.cihi.ca/en/" target="_blank">Canadian Institute for Health Information (CIHI)</a></li>
-      <li><a href="https://www.cafii.com/" target="_blank">Canadian Association of Financial Institutions in Insurance (CAFII)</a></li>
-    </ul>
-    <p>Content researched and developed by <strong>Vipul Anand</strong> of <strong>VA Graphics</strong> for <a href="https://harmonyplan.ca" target="_blank">HarmonyPlan.ca</a> — 21st Century Expansion Initiative.</p>
-  </footer>
 
   <script>
-    const panels = document.querySelectorAll('.panel-header');
-    panels.forEach(header => {
-      header.addEventListener('click', () => {
-        const content = header.nextElementSibling;
-        content.style.display = content.style.display === 'block' ? 'none' : 'block';
+    // Add Font Awesome for panel icons
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    document.head.appendChild(fontAwesome);
+    
+    // Add Google Fonts
+    const googleFonts = document.createElement('link');
+    googleFonts.rel = 'stylesheet';
+    googleFonts.href = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap';
+    document.head.appendChild(googleFonts);
+    
+    // Panel toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const panels = document.querySelectorAll('.panel-header');
+      
+      // Open the first panel by default
+      const firstPanel = document.querySelector('.panel-header');
+      const firstPanelContent = firstPanel.nextElementSibling;
+      firstPanel.classList.add('active');
+      firstPanelContent.style.display = 'block';
+      
+      panels.forEach(header => {
+        header.addEventListener('click', () => {
+          const content = header.nextElementSibling;
+          header.classList.toggle('active');
+          
+          if (content.style.display === 'block') {
+            content.style.display = 'none';
+          } else {
+            content.style.display = 'block';
+          }
+        });
       });
     });
   </script>
