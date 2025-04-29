@@ -1,411 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insurance & Financial Planning Calculator</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <!-- Chart.js for visualizations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insurance & Financial Planning Calculator</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Insurance & Financial Planning Calculator</h1>
-        <p>Estimate premiums and plan financial strategies based on Canadian regulations</p>
-    </header>
+  <header>
+    <h1>Insurance & Financial Planning Calculator</h1>
+    <p>Estimate premiums and plan your finances based on Canadian regulations</p>
+  </header>
 
-    <div class="product-selector">
-        <label for="productType">Select Product/Plan Type:</label>
-        <select id="productType">
-            <option value="auto">Auto Insurance</option>
-            <option value="life">Life Insurance</option>
-            <option value="health">Health Insurance</option>
-            <option value="criticalIllness">Critical Illness Insurance</option>
-            <option value="disability">Disability Insurance</option>
-            <option value="retirement">Retirement Planning</option>
-            <option value="tfsa">TFSA (Tax-Free Savings Account)</option>
-            <option value="resp">RESP (Education Savings)</option>
-            <option value="travel">Travel Insurance</option>
-        </select>
-    </div>
-
-    <!-- Auto Insurance Section -->
-    <section id="autoSection" class="product-section active">
-        <div class="calculator-container">
-            <div class="input-section">
-                <h2>Auto Insurance Calculator</h2>
-                
-                <div class="form-group">
-                    <label for="autoAge">Driver's Age:</label>
-                    <input type="number" id="autoAge" min="16" max="99" value="30">
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoGender">Gender:</label>
-                    <select id="autoGender">
-                        <option value="">Select...</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                        <option value="X">Non-binary/Prefer not to say</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoPostalCode">Postal Code (First Letter):</label>
-                    <input type="text" id="autoPostalCode" maxlength="1" placeholder="e.g. M for Toronto">
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoVehicleValue">Vehicle Value (CAD):</label>
-                    <input type="number" id="autoVehicleValue" min="0" value="25000">
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoVehicleYear">Vehicle Year:</label>
-                    <input type="number" id="autoVehicleYear" min="1950" max="2030" value="2020">
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoDrivingRecord">Driving Record:</label>
-                    <select id="autoDrivingRecord">
-                        <option value="clean">Clean Record (No accidents/tickets)</option>
-                        <option value="minor">Minor Infractions (1-2 tickets)</option>
-                        <option value="major">Major Infractions (At-fault accident or serious violation)</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Coverage Options:</label>
-                    <div class="coverage-options">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="autoLiability" checked>
-                            <label for="autoLiability">Liability</label>
-                        </div>
-                        
-                        <div class="form-group" id="autoLiabilityAmountGroup">
-                            <label for="autoLiabilityAmount">Liability Amount:</label>
-                            <select id="autoLiabilityAmount">
-                                <option value="1000000">$1,000,000</option>
-                                <option value="2000000">$2,000,000</option>
-                                <option value="5000000">$5,000,000</option>
-                            </select>
-                        </div>
-                        
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="autoCollision" checked>
-                            <label for="autoCollision">Collision</label>
-                        </div>
-                        
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="autoComprehensive" checked>
-                            <label for="autoComprehensive">Comprehensive</label>
-                        </div>
-                        
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="autoAccidentBenefits" checked>
-                            <label for="autoAccidentBenefits">Accident Benefits</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="autoDeductible">Deductible Amount (CAD):</label>
-                    <select id="autoDeductible">
-                        <option value="500">$500</option>
-                        <option value="1000">$1,000</option>
-                        <option value="2000">$2,000</option>
-                    </select>
-                </div>
-                
-                <button id="calculateAutoBtn" class="calculate-btn">Calculate Premium</button>
-            </div>
-            
-            <div class="results-section">
-                <h2>Estimated Auto Insurance Premium</h2>
-                
-                <div id="autoPremiumResult" class="premium-result">$0.00</div>
-                
-                <p>This is an estimated annual premium based on the information provided.</p>
-                
-                <div class="assumptions-list">
-                    <h4>Key Assumptions</h4>
-                    <ul id="autoAssumptionsList">
-                        <!-- Assumptions will be added here -->
-                    </ul>
-                </div>
-                
-                <button id="toggleAutoDetails" class="toggle-details">Show calculation details</button>
-                
-                <div id="autoDetailsSection" class="details-section hidden">
-                    <h3>Premium Calculation Breakdown</h3>
-                    <table class="details-table">
-                        <thead>
-                            <tr>
-                                <th>Factor</th>
-                                <th>Base Value</th>
-                                <th>Multiplier</th>
-                                <th>Subtotal</th>
-                            </tr>
-                        </thead>
-                        <tbody id="autoDetailsTable">
-                            <!-- Details will be added here -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="warning">
-                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums may vary based on detailed underwriting criteria, additional risk factors, and current FSRA regulations. Please consult an insurance professional for a final quote.
-                </div>
-            </div>
-        </div>
-    </section>
-
- 
-    <!-- Life Insurance Section -->
-<section id="lifeSection" class="product-section">
-  <div class="calculator-container">
-
-    <!-- Inputs -->
-    <div class="input-section">
-      <h2>Life Insurance Calculator</h2>
-
-      <div class="form-group">
-        <label for="lifeAge">Your Age:</label>
-        <input type="number" id="lifeAge" min="18" max="99" value="30">
-      </div>
-
-      <div class="form-group">
-        <label for="lifeSmoker">Smoker Status:</label>
-        <select id="lifeSmoker">
-          <option value="no" selected>Non-Smoker</option>
-          <option value="yes">Smoker</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="lifeSumAssured">Sum Assured (CAD):</label>
-        <input type="number" id="lifeSumAssured" min="10000" step="10000" value="100000">
-      </div>
-
-      <div class="form-group">
-        <label for="lifeTerm">Term Length (years):</label>
-        <select id="lifeTerm">
-          <option value="10">10</option>
-          <option value="15">15</option>
-          <option value="20" selected>20</option>
-          <option value="25">25</option>
-          <option value="30">30</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="lifeHealthRating">Health Rating:</label>
-        <select id="lifeHealthRating">
-          <option value="preferred">Preferred</option>
-          <option value="standard" selected>Standard</option>
-          <option value="substandard">Substandard</option>
-        </select>
-      </div>
-
-      <button id="calculateLifeBtn" class="calculate-btn">Calculate Premium</button>
-    </div>
-
-    <!-- Results -->
-    <div class="results-section">
-      <h2>Estimated Life Insurance Premium</h2>
-
-      <div id="lifePremiumResult" class="premium-result">$0.00</div>
-
-      <div class="assumptions-list">
-        <h4>Key Assumptions</h4>
-        <ul id="lifeAssumptionsList"></ul>
-      </div>
-
-      <button id="toggleLifeDetails" class="toggle-details">Show calculation details</button>
-
-      <div id="lifeDetailsSection" class="details-section hidden">
-        <h3>Calculation Breakdown</h3>
-        <table class="details-table">
-          <thead>
-            <tr>
-              <th>Factor</th><th>Base Value</th><th>Multiplier</th><th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody id="lifeDetailsTable"></tbody>
-        </table>
-      </div>
-
-      <div class="warning">
-        <strong>Important:</strong> Estimates only—actual premiums depend on full underwriting and FSRA rules.
-      </div>
-    </div>
-
+  <div class="product-selector">
+    <label for="productType">Select Product:</label>
+    <select id="productType">
+      <option value="auto">Auto</option>
+      <option value="life">Life</option>
+      <option value="health">Health</option>
+      <option value="critical">Critical Illness</option>
+      <option value="disability">Disability</option>
+      <option value="retirement">Retirement</option>
+      <option value="tfsa">TFSA</option>
+      <option value="resp">RESP</option>
+      <option value="travel">Travel</option>
+    </select>
   </div>
-</section>
 
-<!-- Scripts: load module first, then main.js -->
-<script src="js/lifeCalc.js"></script>
-<script src="js/main.js"></script>
-
-
-    
-    <!-- Health Insurance Section -->
-<section id="healthSection" class="product-section">
+  <!-- Auto Insurance -->
+  <section id="autoSection" class="product-section active">
     <div class="calculator-container">
-        <div class="input-section">
-            <h2>Health Insurance Calculator</h2>
-            
-            <div class="form-group">
-                <label for="healthAge">Age:</label>
-                <input type="number" id="healthAge" min="18" max="99" value="35">
-            </div>
-            
-            <div class="form-group">
-                <label for="healthProvince">Province:</label>
-                <select id="healthProvince">
-                    <option value="ON" selected>Ontario</option>
-                    <option value="BC">British Columbia</option>
-                    <option value="AB">Alberta</option>
-                    <option value="QC">Quebec</option>
-                    <option value="MB">Manitoba</option>
-                    <option value="SK">Saskatchewan</option>
-                    <option value="NS">Nova Scotia</option>
-                    <option value="NB">New Brunswick</option>
-                    <option value="NL">Newfoundland and Labrador</option>
-                    <option value="PE">Prince Edward Island</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="healthCoverage">Coverage Type:</label>
-                <select id="healthCoverage">
-                    <option value="individual">Individual</option>
-                    <option value="couple">Couple</option>
-                    <option value="family">Family</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="healthMedicalHistory">Medical History:</label>
-                <select id="healthMedicalHistory">
-                    <option value="excellent">Excellent - No conditions</option>
-                    <option value="good" selected>Good - Minor conditions</option>
-                    <option value="average">Average - Some managed conditions</option>
-                    <option value="poor">Poor - Multiple conditions</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Coverage Options:</label>
-                <div class="coverage-options">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="healthDental" checked>
-                        <label for="healthDental">Dental</label>
-                    </div>
-                    
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="healthVision" checked>
-                        <label for="healthVision">Vision</label>
-                    </div>
-                    
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="healthPrescription" checked>
-                        <label for="healthPrescription">Prescription Drugs</label>
-                    </div>
-                    
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="healthParamedical" checked>
-                        <label for="healthParamedical">Paramedical Services</label>
-                    </div>
-                    
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="healthHospital">
-                        <label for="healthHospital">Hospital Room Upgrade</label>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="healthDeductible">Annual Deductible (CAD):</label>
-                <select id="healthDeductible">
-                    <option value="0">$0</option>
-                    <option value="250">$250</option>
-                    <option value="500" selected>$500</option>
-                    <option value="1000">$1,000</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="healthCoinsurance">Coinsurance Rate:</label>
-                <select id="healthCoinsurance">
-                    <option value="100">100% (Insurance pays all)</option>
-                    <option value="80" selected>80% (You pay 20%)</option>
-                    <option value="70">70% (You pay 30%)</option>
-                </select>
-            </div>
-            
-            <button id="calculateHealthBtn" class="calculate-btn">Calculate Premium</button>
+      <div class="input-section">
+        <h2>Auto Insurance</h2>
+        <div class="form-group">
+          <label for="autoAge">Driver Age:</label>
+          <input type="number" id="autoAge" min="16" max="99" value="30">
         </div>
-        
-        <div class="results-section">
-            <h2>Estimated Health Insurance Premium</h2>
-            
-            <div id="healthPremiumResult" class="premium-result">$0.00</div>
-            <p>Monthly premium estimate</p>
-            
-            <div class="assumptions-list">
-                <h4>Key Assumptions</h4>
-                <ul id="healthAssumptionsList">
-                    <!-- Assumptions will be added here -->
-                </ul>
-            </div>
-            
-            <button id="toggleHealthDetails" class="toggle-details">Show calculation details</button>
-            
-            <div id="healthDetailsSection" class="details-section hidden">
-                <h3>Premium Calculation Breakdown</h3>
-                <table class="details-table">
-                    <thead>
-                        <tr>
-                            <th>Coverage Component</th>
-                            <th>Base Premium</th>
-                            <th>Adjustments</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody id="healthDetailsTable">
-                        <!-- Details will be added here -->
-                    </tbody>
-                </table>
-            </div>
-            <!-- Other product sections will follow the same pattern -->
-    <!-- Each product will be implemented one by one -->
-            
-            <div class="warning">
-                <strong>Important:</strong> This calculator provides estimates only. Actual premiums will vary based on specific health plan details, provincial regulations, and individual medical assessments. Please consult with a licensed insurance advisor for final pricing.
-            </div>
+        <div class="form-group">
+          <label for="autoPostal">Postal Code (First Letter):</label>
+          <input type="text" id="autoPostal" maxlength="1" placeholder="M">
         </div>
+        <div class="form-group">
+          <label for="autoValue">Vehicle Value (CAD):</label>
+          <input type="number" id="autoValue" value="25000">
+        </div>
+        <div class="form-group">
+          <label for="autoYear">Vehicle Year:</label>
+          <input type="number" id="autoYear" value="2020">
+        </div>
+        <div class="form-group">
+          <label for="autoRecord">Driving Record:</label>
+          <select id="autoRecord">
+            <option value="clean">Clean</option>
+            <option value="minor">Minor</option>
+            <option value="major">Major</option>
+          </select>
+        </div>
+        <button id="calcAuto">Calculate</button>
+      </div>
+      <div class="results-section">
+        <h2>Estimated Premium</h2>
+        <div id="autoResult" class="premium-result">$0.00</div>
+        <ul id="autoAssumptions"></ul>
+        <button id="toggleAutoDetails" class="toggle-details">Show details</button>
+        <div id="autoDetails" class="details-section hidden">
+          <table><thead><tr><th>Factor</th><th>Base</th><th>Mult</th><th>Sub</th></tr></thead><tbody id="autoDetailsTable"></tbody></table>
+        </div>
+      </div>
     </div>
-</section>
+  </section>
 
-    <footer class="disclaimer">
-        <h3>Regulatory Compliance</h3>
-        <p>This calculator tool is designed to comply with the following Canadian regulatory frameworks:</p>
-        <ul>
-            <li><strong>FSRA (Financial Services Regulatory Authority of Ontario)</strong></li>
-            <li><strong>PIPEDA (Personal Information Protection and Electronic Documents Act)</strong></li>
-            <li><strong>Provincial Insurance Regulators</strong></li>
-        </ul>
-        <p>This calculator is provided for educational and estimation purposes only. It does not constitute financial advice or an offer of insurance.</p>
-        <div id="regulatory-details" class="hidden">
-            <!-- Detailed regulatory information will be loaded here -->
+  <!-- Repeat similar sections for each product -->
+
+  <!-- Life Insurance -->
+  <section id="lifeSection" class="product-section">
+    <div class="calculator-container">
+      <div class="input-section">
+        <h2>Life Insurance</h2>
+        <div class="form-group">
+          <label for="lifeAge">Age:</label>
+          <input type="number" id="lifeAge" min="18" max="99" value="30">
         </div>
-        <button id="showRegulationsBtn" class="text-button">Show Regulatory Details</button>
-    </footer>
+        <div class="form-group">
+          <label for="lifeSmoker">Smoker:</label>
+          <select id="lifeSmoker">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="lifeSum">Sum Assured (CAD):</label>
+          <input type="number" id="lifeSum" value="100000">
+        </div>
+        <div class="form-group">
+          <label for="lifeTerm">Term (yrs):</label>
+          <select id="lifeTerm"><option>10</option><option>15</option><option selected>20</option><option>25</option><option>30</option></select>
+        </div>
+        <div class="form-group">
+          <label for="lifeHealth">Health Rating:</label>
+          <select id="lifeHealth">
+            <option value="preferred">Preferred</option>
+            <option value="standard" selected>Standard</option>
+            <option value="substandard">Substandard</option>
+          </select>
+        </div>
+        <button id="calcLife">Calculate</button>
+      </div>
+      <div class="results-section">
+        <h2>Estimated Premium</h2>
+        <div id="lifeResult" class="premium-result">$0.00</div>
+        <ul id="lifeAssumptions"></ul>
+        <button id="toggleLifeDetails" class="toggle-details">Show details</button>
+        <div id="lifeDetails" class="details-section hidden">
+          <table><thead><tr><th>Factor</th><th>Base</th><th>Mult</th><th>Sub</th></tr></thead><tbody id="lifeDetailsTable"></tbody></table>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- Scripts -->
-     <script src="js/lifecalc.js"></script>
-    <script src="js/main.js"></script>
-   
+  <!-- Health Insurance -->
+  <section id="healthSection" class="product-section">
+    <!-- similar markup with ids: healthAge, healthProvince, healthCoverage, healthHistory, calcHealth, healthResult, healthAssumptions, toggleHealthDetails, healthDetails, healthDetailsTable -->
+  </section>
+
+  <!-- Critical Illness -->
+  <section id="criticalSection" class="product-section">
+    <!-- ids: criticalAge, criticalSum, criticalHealth, calcCritical, criticalResult, criticalAssumptions, toggleCriticalDetails, criticalDetails, criticalDetailsTable -->
+  </section>
+
+  <!-- Disability Insurance -->
+  <section id="disabilitySection" class="product-section">
+    <!-- ids: disabilityIncome, disabilityOccupation, disabilityWaiting, disabilityBenefit, calcDisability, disabilityResult, disabilityAssumptions, toggleDisabilityDetails, disabilityDetails, disabilityDetailsTable -->
+  </section>
+
+  <!-- Retirement Planning -->
+  <section id="retirementSection" class="product-section">
+    <!-- ids: retireAge, retireTargetAge, retireSavings, retireIncome, retireReturn, calcRetirement, retirementResult, retirementAssumptions, retirementDetails, retirementDetailsTable -->
+  </section>
+
+  <!-- TFSA -->
+  <section id="tfsaSection" class="product-section">
+    <!-- ids: tfsaYears, tfsaContribution, tfsaReturn, tfsaBalance, calcTfsa, tfsaResult, tfsaAssumptions, tfsaDetails, tfsaDetailsTable -->
+  </section>
+
+  <!-- RESP -->
+  <section id="respSection" class="product-section">
+    <!-- ids: respYears, respCost, respReturn, calcResp, respResult, respAssumptions, respDetails, respDetailsTable -->
+  </section>
+
+  <!-- Travel Insurance -->
+  <section id="travelSection" class="product-section">
+    <!-- ids: travelDays, travelAge, travelDestination, travelSum, calcTravel, travelResult, travelAssumptions, toggleTravelDetails, travelDetails, travelDetailsTable -->
+  </section>
+
+  <footer class="disclaimer">
+    <p>Estimates only. Consult a licensed advisor for final rates. FSRA & PIPEDA compliant.</p>
+  </footer>
+
+  <!-- Scripts: load modules then main.js -->
+  <script src="js/auto.js"></script>
+  <script src="js/life.js"></script>
+  <script src="js/health.js"></script>
+  <script src="js/critical.js"></script>
+  <script src="js/disability.js"></script>
+  <script src="js/retirement.js"></script>
+  <script src="js/tfsa.js"></script>
+  <script src="js/resp.js"></script>
+  <script src="js/travel.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
