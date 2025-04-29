@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Insurance Premium Calculator - Ontario</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --text-color: #212529;
+            --border-color: #dee2e6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f7fa;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .calculator-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #004494;
+        }
+        
+        .coverage-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .premium-result {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+        
+        .assumptions-list {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .assumptions-list h4 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .assumptions-list ul {
+            list-style-type: none;
+        }
+        
+        .assumptions-list li {
+            padding: 5px 0;
+            border-bottom: 1px dotted var(--border-color);
+        }
+        
+        .assumptions-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-details {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .details-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .details-table th, .details-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .details-table th {
+            background-color: var(--secondary-color);
+        }
+        
+        .warning {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Auto Insurance Premium Calculator</h1>
+        <p>Estimate your auto insurance premium based on Ontario regulations</p>
+    </header>
+
+    <div class="calculator-container">
+        <section class="input-section">
+            <h2>Driver & Vehicle Information</h2>
+            
+            <div class="form-group">
+                <label for="age">Driver's Age:</label>
+                <input type="number" id="age" min="16" max="99" value="30">
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender">
+                    <option value="">Select...</option>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="X">Non-binary/Prefer not to say</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="postalCode">Postal Code (First Letter):</label>
+                <input type="text" id="postalCode" maxlength="1" placeholder="e.g. M for Toronto">
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicleValue">Vehicle Value (CAD):</label>
+                <input type="number" id="vehicleValue" min="0" value="25000">
+            </div>
+            
+            <div class="form-group">
+                <label for="vehicleYear">Vehicle Year:</label>
+                <input type="number" id="vehicleYear" min="1950" max="2030" value="2020">
+            </div>
+            
+            <div class="form-group">
+                <label for="drivingRecord">Driving Record:</label>
+                <select id="drivingRecord">
+                    <option value="clean">Clean Record (No accidents/tickets)</option>
+                    <option value="minor">Minor Infractions (1-2 tickets)</option>
+                    <option value="major">Major Infractions (At-fault accident or serious violation)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Coverage Options:</label>
+                <div class="coverage-options">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="liability" checked>
+                        <label for="liability">Liability</label>
+                    </div>
+                    
+                    <div class="form-group" id="liabilityAmountGroup">
+                        <label for="liabilityAmount">Liability Amount:</label>
+                        <select id="liabilityAmount">
+                            <option value="1000000">$1,000,000</option>
+                            <option value="2000000">$2,000,000</option>
+                            <option value="5000000">$5,000,000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="collision" checked>
+                        <label for="collision">Collision</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="comprehensive" checked>
+                        <label for="comprehensive">Comprehensive</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="accidentBenefits" checked>
+                        <label for="accidentBenefits">Accident Benefits</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="deductible">Deductible Amount (CAD):</label>
+                <select id="deductible">
+                    <option value="500">$500</option>
+                    <option value="1000">$1,000</option>
+                    <option value="2000">$2,000</option>
+                </select>
+            </div>
+            
+            <button id="calculateBtn">Calculate Premium</button>
+        </section>
+        
+        <section class="results-section">
+            <h2>Estimated Premium</h2>
+            
+            <div id="premiumResult" class="premium-result">$0.00</div>
+            
+            <p>This is an estimated annual premium based on the information provided.</p>
+            
+            <div class="assumptions-list">
+                <h4>Key Assumptions</h4>
+                <ul id="assumptionsList">
+                    <!-- Assumptions will be added here -->
+                </ul>
+            </div>
+            
+            <button id="toggleDetails" class="toggle-details">Show calculation details</button>
+            
+            <div id="detailsSection" class="details-section hidden">
+                <h3>Premium Calculation Breakdown</h3>
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Base Value</th>
+                            <th>Multiplier</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTable">
+                        <!-- Details will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="warning">
+                <strong>Important:</strong> This calculator provides estimates only. Actual premiums may vary based on detailed underwriting criteria, additional risk factors, and current FSRA regulations. Please consult an insurance professional for a final quote.
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Ontario territorial rating factors (simplified)
+        const territorialFactors = {
+            'M': 1.25, // Toronto
+            'L': 1.15, // London area
+            'K': 1.10, // Kingston/Eastern Ontario
+            'N': 1.05, // Southwestern Ontario
+            'P': 1.00, // Northern Ontario
+            'G': 1.20, // Central Ontario
+            'H': 1.20, // Hamilton area
+            'J': 1.15, // Peterborough area
+            'T': 1.25, // Toronto area
+            '': 1.10  // Default if not specified
+        };
+        
+        // Age-based risk factors
+        const ageFactors = {
+            // Teen drivers (high risk)
+            16: 2.50, 17: 2.40, 18: 2.30, 19: 2.20,
+            // Young adults (moderate-high risk) 
+            20: 2.10, 21: 2.00, 22: 1.90, 23: 1.80, 24: 1.70,
+            // Adults (baseline risk)
+            25: 1.20, 30: 1.00, 35: 0.95, 40: 0.90, 45: 0.90,
+            // Middle-aged (low risk)
+            50: 0.85, 55: 0.85, 60: 0.80, 65: 0.80,
+            // Seniors (increasing risk)
+            70: 0.85, 75: 0.95, 80: 1.10, 85: 1.30,
+            90: 1.50, 95: 1.80, 99: 2.00
+        };
+        
+        // Vehicle age discount factors
+        const vehicleAgeFactors = {
+            0: 1.20,  // New vehicle (current year)
+            1: 1.15,  // 1 year old
+            2: 1.10,  // 2 years old
+            3: 1.05,  // 3 years old
+            4: 1.00,  // 4 years old
+            5: 0.95,  // 5 years old
+            8: 0.90,  // 6-8 years old
+            10: 0.85, // 9-10 years old
+            15: 0.80, // 11-15 years old
+            20: 0.90, // 16-20 years old (classics, higher maintenance)
+            25: 1.00  // Over 20 years (antiques, special considerations)
+        };
+        
+        // Driving record factors
+        const drivingRecordFactors = {
+            'clean': 1.00,
+            'minor': 1.30,
+            'major': 1.80
+        };
+        
+        // Base rates for different coverages (simplified)
+        const baseRates = {
+            'liability': 600,
+            'collision': 400,
+            'comprehensive': 300,
+            'accidentBenefits': 200
+        };
+        
+        // Initialize calculation details
+        let calculationDetails = [];
+        let assumptions = [];
+        
+        // Function to get the age factor with interpolation
+        function getAgeFactor(age) {
+            // Define key age points from our ageFactors object
+            const ages = Object.keys(ageFactors).map(Number).sort((a, b) => a - b);
+            
+            // If age is less than minimum or greater than maximum, use the boundary values
+            if (age <= ages[0]) return ageFactors[ages[0]];
+            if (age >= ages[ages.length - 1]) return ageFactors[ages[ages.length - 1]];
+            
+            // Find the two surrounding age points for interpolation
+            let lowerAge = ages.filter(a => a <= age).pop();
+            let upperAge = ages.filter(a => a > age)[0];
+            
+            // Linear interpolation between the two surrounding points
+            let lowerFactor = ageFactors[lowerAge];
+            let upperFactor = ageFactors[upperAge];
+            let ratio = (age - lowerAge) / (upperAge - lowerAge);
+            
+            return lowerFactor + ratio * (upperFactor - lowerFactor);
+        }
+        
+        // Function to get vehicle age factor with interpolation
+        function getVehicleAgeFactor(vehicleYear) {
+            const currentYear = new Date().getFullYear();
+            const vehicleAge = currentYear - vehicleYear;
+            
+            if (vehicleAge < 0) return 1.2; // Future models (concept cars, etc.)
+            
+            const ages = Object.keys(vehicleAgeFactors).map(Number).sort((a, b) => a - b);
+            
+            // Find the correct age bracket
+            if (vehicleAge >= ages[ages.length - 1]) return vehicleAgeFactors[ages[ages.length - 1]];
+            
+            for (let i = 0; i < ages.length - 1; i++) {
+                if (vehicleAge >= ages[i] && vehicleAge < ages[i + 1]) {
+                    // Linear interpolation between brackets if needed
+                    if (ages[i + 1] - ages[i] > 1) {
+                        const lowerFactor = vehicleAgeFactors[ages[i]];
+                        const upperFactor = vehicleAgeFactors[ages[i + 1]];
+                        const ratio = (vehicleAge - ages[i]) / (ages[i + 1] - ages[i]);
+                        return lowerFactor + ratio * (upperFactor - lowerFactor);
+                    }
+                    return vehicleAgeFactors[ages[i]];
+                }
+            }
+            
+            return 1.0; // Default factor if not found
+        }
+        
+        // Calculate premium based on input values
+        function calculatePremium() {
+            // Reset calculation details and assumptions
+            calculationDetails = [];
+            assumptions = [];
+            
+            // Get input values
+            const age = parseInt(document.getElementById('age').value) || 30;
+            const gender = document.getElementById('gender').value;
+            const postalCode = document.getElementById('postalCode').value.toUpperCase();
+            const vehicleValue = parseFloat(document.getElementById('vehicleValue').value) || 25000;
+            const vehicleYear = parseInt(document.getElementById('vehicleYear').value) || 2020;
+            const drivingRecord = document.getElementById('drivingRecord').value;
+            const deductible = parseInt(document.getElementById('deductible').value) || 500;
+            
+            // Get selected coverages
+            const liabilityCovered = document.getElementById('liability').checked;
+            const liabilityAmount = parseInt(document.getElementById('liabilityAmount').value);
+            const collisionCovered = document.getElementById('collision').checked;
+            const comprehensiveCovered = document.getElementById('comprehensive').checked;
+            const accidentBenefitsCovered = document.getElementById('accidentBenefits').checked;
+            
+            // Calculate base premium
+            let basePremium = 0;
+            
+            // Add liability coverage if selected
+            if (liabilityCovered) {
+                const liabilityFactor = liabilityAmount / 1000000;
+                const liabilityPremium = baseRates.liability * liabilityFactor;
+                basePremium += liabilityPremium;
+                calculationDetails.push({
+                    factor: 'Liability Coverage',
+                    baseValue: `$${baseRates.liability.toFixed(2)}`,
+                    multiplier: liabilityFactor.toFixed(2),
+                    subtotal: `$${liabilityPremium.toFixed(2)}`
+                });
+                
+                assumptions.push(`Statutory minimum liability coverage in Ontario is $200,000, but $1,000,000 or higher is recommended.`);
+            }
+            
+            // Add collision coverage if selected
+            if (collisionCovered) {
+                // Adjust for vehicle value
+                const valueFactor = Math.sqrt(vehicleValue / 25000);
+                const adjustedCollision = baseRates.collision * valueFactor;
+                
+                // Adjust for deductible
+                const deductibleFactor = deductible === 500 ? 1.0 : 
+                                         deductible === 1000 ? 0.9 : 0.8;
+                
+                const collisionPremium = adjustedCollision * deductibleFactor;
+                basePremium += collisionPremium;
+                
+                calculationDetails.push({
+                    factor: 'Collision Coverage',
+                    baseValue: `$${baseRates.collision.toFixed(2)}`,
+                    multiplier: `${valueFactor.toFixed(2)} × ${deductibleFactor.toFixed(2)}`,
+                    subtotal: `$${collisionPremium.toFixed(2)}`
+                });
+                
+                assumptions.push(`Collision coverage with $${deductible} deductible. Higher deductibles lower your premium.`);
+            }
+            
+            // Add comprehensive coverage if selected
+            if (comprehensiveCovered) {
+                // Adjust for vehicle value
+                const valueFactor = Math.sqrt(vehicleValue / 25000);
+                const adjustedComprehensive = baseRates.comprehensive * valueFactor;
+                
+                // Adjust for deductible
+                const deductibleFactor = deductible === 500 ? 1.0 : 
+                                         deductible === 1000 ? 0.9 : 0.8;
+                
+                const comprehensivePremium = adjustedComprehensive * deductibleFactor;
+                basePremium += comprehensivePremium;
+                
+                calculationDetails.push({
+                    factor: 'Comprehensive Coverage',
+                    baseValue: `$${baseRates.comprehensive.toFixed(2)}`,
+                    multiplier: `${valueFactor.toFixed(2)} × ${deductibleFactor.toFixed(2)}`,
+                    subtotal: `$${comprehensivePremium.toFixed(2)}`
+                });
+                
+                assumptions.push(`Comprehensive coverage protects against theft, vandalism, and damage not resulting from collision.`);
+            }
+            
+            // Add accident benefits if selected
+            if (accidentBenefitsCovered) {
+                basePremium += baseRates.accidentBenefits;
+                
+                calculationDetails.push({
+                    factor: 'Accident Benefits',
+                    baseValue: `$${baseRates.accidentBenefits.toFixed(2)}`,
+                    multiplier: '1.00',
+                    subtotal: `$${baseRates.accidentBenefits.toFixed(2)}`
+                });
+                
+                assumptions.push(`Statutory accident benefits coverage is mandatory in Ontario and provides medical, rehabilitation, income replacement benefits.`);
+            }
+            
+            // Apply territorial factor
+            const territorialFactor = territorialFactors[postalCode] || territorialFactors[''];
+            let territoralAdjustedPremium = basePremium * territorialFactor;
+            
+            calculationDetails.push({
+                factor: 'Territory Factor',
+                baseValue: `$${basePremium.toFixed(2)}`,
+                multiplier: territorialFactor.toFixed(2),
+                subtotal: `$${territoralAdjustedPremium.toFixed(2)}`
+            });
+            
+            if (postalCode) {
+                assumptions.push(`Postal code area ${postalCode} has a territorial rating factor of ${territorialFactor.toFixed(2)}.`);
+            } else {
+                assumptions.push(`No postal code provided. Using default territorial factor of ${territorialFactor.toFixed(2)}.`);
+            }
+            
+            // Apply age factor
+            const ageFactor = getAgeFactor(age);
+            let ageAdjustedPremium = territoralAdjustedPremium * ageFactor;
+            
+            calculationDetails.push({
+                factor: 'Driver Age Factor',
+                baseValue: `$${territoralAdjustedPremium.toFixed(2)}`,
+                multiplier: ageFactor.toFixed(2),
+                subtotal: `$${ageAdjustedPremium.toFixed(2)}`
+            });
+            
+            assumptions.push(`Driver age ${age} has a risk factor of ${ageFactor.toFixed(2)}.`);
+            
+            // Apply vehicle age factor
+            const vehicleAgeFactor = getVehicleAgeFactor(vehicleYear);
+            let vehicleAgeAdjustedPremium = ageAdjustedPremium * vehicleAgeFactor;
+            
+            calculationDetails.push({
+                factor: 'Vehicle Age Factor',
+                baseValue: `$${ageAdjustedPremium.toFixed(2)}`,
+                multiplier: vehicleAgeFactor.toFixed(2),
+                subtotal: `$${vehicleAgeAdjustedPremium.toFixed(2)}`
+            });
+            
+            const vehicleAge = new Date().getFullYear() - vehicleYear;
+            assumptions.push(`${vehicleYear} vehicle (${vehicleAge} years old) has an age factor of ${vehicleAgeFactor.toFixed(2)}.`);
+            
+            // Apply driving record factor
+            const recordFactor = drivingRecordFactors[drivingRecord] || 1.0;
+            let finalPremium = vehicleAgeAdjustedPremium * recordFactor;
+            
+            calculationDetails.push({
+                factor: 'Driving Record Factor',
+                baseValue: `$${vehicleAgeAdjustedPremium.toFixed(2)}`,
+                multiplier: recordFactor.toFixed(2),
+                subtotal: `$${finalPremium.toFixed(2)}`
+            });
+            
+            if (drivingRecord === 'clean') {
+                assumptions.push(`Clean driving record applied. No tickets or accidents in past 6 years.`);
+            } else if (drivingRecord === 'minor') {
+                assumptions.push(`Minor infractions applied. This includes 1-2 minor tickets in past 3 years.`);
+            } else {
+                assumptions.push(`Major infractions applied. This includes at-fault accidents or serious violations.`);
+            }
+            
+            // Apply Ontario Auto Insurance Tax (8%) 
+            const tax = finalPremium * 0.08;
+            const totalPremium = finalPremium + tax;
+            
+            calculationDetails.push({
+                factor: 'Ontario Insurance Premium Tax',
+                baseValue: `$${finalPremium.toFixed(2)}`,
+                multiplier: '8%',
+                subtotal: `$${tax.toFixed(2)}`
+            });
+            
+            calculationDetails.push({
+                factor: 'Total Annual Premium',
+                baseValue: '',
+                multiplier: '',
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            assumptions.push(`8% Ontario Insurance Premium Tax included in the final amount.`);
+            assumptions.push(`This is an estimate only and actual premiums may differ based on complete underwriting information.`);
+            
+            // Display the result
+            document.getElementById('premiumResult').textContent = `$${totalPremium.toFixed(2)}`;
+            
+            // Update assumptions list
+            updateAssumptionsList();
+            
+            // Update details table
+            updateDetailsTable();
+        }
+        
+        // Update the assumptions list in the UI
+        function updateAssumptionsList() {
+            const assumptionsList = document.getElementById('assumptionsList');
+            assumptionsList.innerHTML = '';
+            
+            assumptions.forEach(assumption => {
+                const li = document.createElement('li');
+                li.textContent = assumption;
+                assumptionsList.appendChild(li);
+            });
+        }
+        
+        // Update the details table in the UI
+        function updateDetailsTable() {
+            const detailsTable = document.getElementById('detailsTable');
+            detailsTable.innerHTML = '';
+            
+            calculationDetails.forEach(detail => {
+                const row = document.createElement('tr');
+                
+                const factorCell = document.createElement('td');
+                factorCell.textContent = detail.factor;
+                row.appendChild(factorCell);
+                
+                const baseValueCell = document.createElement('td');
+                baseValueCell.textContent = detail.baseValue;
+                row.appendChild(baseValueCell);
+                
+                const multiplierCell = document.createElement('td');
+                multiplierCell.textContent = detail.multiplier;
+                row.appendChild(multiplierCell);
+                
+                const subtotalCell = document.createElement('td');
+                subtotalCell.textContent = detail.subtotal;
+                row.appendChild(subtotalCell);
+                
+                detailsTable.appendChild(row);
+            });
+        }
+        
+        // Function to toggle details section visibility
+        function toggleDetails() {
+            const detailsSection = document.getElementById('detailsSection');
+            const toggleButton = document.getElementById('toggleDetails');
+            
+            if (detailsSection.classList.contains('hidden')) {
+                detailsSection.classList.remove('hidden');
+                toggleButton.textContent = 'Hide calculation details';
+            } else {
+                detailsSection.classList.add('hidden');
+                toggleButton.textContent = 'Show calculation details';
+            }
+        }
+        
+        // Set up event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Calculate button click event
+            document.getElementById('calculateBtn').addEventListener('click', calculatePremium);
+            
+            // Toggle details button click event
+            document.getElementById('toggleDetails').addEventListener('click', toggleDetails);
+            
+            // Initialize with a calculation
+            calculatePremium();
+        });
+    </script>
+</body>
+</html>
