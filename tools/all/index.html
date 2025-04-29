@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance & Financial Planning Calculator</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #f8f9fa;
+            --accent-color: #28a745;
+            --warning-color: #dc3545;
+            --text-color: #212529;
+            --border-color: #dee2e6;
+            --highlight-color: #e9ecef;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f5f7fa;
+        }
+        
+        header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+        
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .product-selector {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .product-selector label {
+            font-weight: 600;
+            margin-right: 15px;
+        }
+        
+        .product-selector select {
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            min-width: 250px;
+        }
+        
+        .calculator-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .results-section {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .form-group input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #004494;
+        }
+        
+        .coverage-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .premium-result {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+        
+        .assumptions-list {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        
+        .assumptions-list h4 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+        
+        .assumptions-list ul {
+            list-style-type: none;
+        }
+        
+        .assumptions-list li {
+            padding: 5px 0;
+            border-bottom: 1px dotted var(--border-color);
+        }
+        
+        .assumptions-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-details {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .details-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .details-table th, .details-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .details-table th {
+            background-color: var(--secondary-color);
+        }
+        
+        .warning {
+            color: #721c24;
+            background-color: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .disclaimer {
+            font-size: 12px;
+            background-color: var(--highlight-color);
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+            border-left: 5px solid var(--primary-color);
+        }
+        
+        .regulatory-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .regulatory-link:hover {
+            text-decoration: underline;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .product-section {
+            display: none;
+        }
+        
+        .product-section.active {
+            display: block;
+        }
+        
+        .tab-navigation {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab-button {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .tab-button.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            font-weight: 600;
+        }
+        
+        .info-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 12px;
+            cursor: help;
+            margin-left: 5px;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 250px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .chart-container {
+            margin-top: 30px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-height: 400px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-container {
+                flex-direction: column;
+            }
+            
+            .tab-navigation {
+                overflow-x: auto;
+                white-space: nowrap;
+                padding-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Insurance & Financial Planning Calculator</h1>
+        <p>Estimate premiums and plan financial strategies based on Canadian regulations</p>
+    </header>
+
+    <div class="product-selector">
+        <label for="productType">Select Product/Plan Type:</label>
+        <select id="productType">
+            <option value="auto">Auto Insurance</option>
+            <option value="life">Life Insurance</option>
+            <option value="health">Health Insurance</option>
+            <option value="criticalIllness">Critical Illness Insurance</option>
+            <option value="disability">Disability Insurance</option>
+            <option value="retirement">Retirement Planning</option>
+            <option value="tfsa">Tax-Free Savings Account (TFSA)</option>
+            <option value="resp">Registered Education Savings Plan (RESP)</option>
+            <option value="travel">Travel Insurance</option>
+        </select>
+    </div>
+
+    <!-- Auto Insurance Section -->
+    <div id="autoSection" class="product-section active">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Auto Insurance Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="autoAge">Driver's Age:</label>
+                    <input type="number" id="autoAge" min="16" max="99" value="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoGender">Gender:</label>
+                    <select id="autoGender">
+                        <option value="">Select...</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="X">Non-binary/Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoPostalCode">Postal Code (First Letter):</label>
+                    <input type="text" id="autoPostalCode" maxlength="1" placeholder="e.g. M for Toronto">
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoVehicleValue">Vehicle Value (CAD):</label>
+                    <input type="number" id="autoVehicleValue" min="0" value="25000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoVehicleYear">Vehicle Year:</label>
+                    <input type="number" id="autoVehicleYear" min="1950" max="2030" value="2020">
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoDrivingRecord">Driving Record:</label>
+                    <select id="autoDrivingRecord">
+                        <option value="clean">Clean Record (No accidents/tickets)</option>
+                        <option value="minor">Minor Infractions (1-2 tickets)</option>
+                        <option value="major">Major Infractions (At-fault accident or serious violation)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Coverage Options:</label>
+                    <div class="coverage-options">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="autoLiability" checked>
+                            <label for="autoLiability">Liability</label>
+                        </div>
+                        
+                        <div class="form-group" id="autoLiabilityAmountGroup">
+                            <label for="autoLiabilityAmount">Liability Amount:</label>
+                            <select id="autoLiabilityAmount">
+                                <option value="1000000">$1,000,000</option>
+                                <option value="2000000">$2,000,000</option>
+                                <option value="5000000">$5,000,000</option>
+                            </select>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="autoCollision" checked>
+                            <label for="autoCollision">Collision</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="autoComprehensive" checked>
+                            <label for="autoComprehensive">Comprehensive</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="autoAccidentBenefits" checked>
+                            <label for="autoAccidentBenefits">Accident Benefits</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="autoDeductible">Deductible Amount (CAD):</label>
+                    <select id="autoDeductible">
+                        <option value="500">$500</option>
+                        <option value="1000">$1,000</option>
+                        <option value="2000">$2,000</option>
+                    </select>
+                </div>
+                
+                <button id="calculateAutoBtn">Calculate Premium</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Estimated Auto Insurance Premium</h2>
+                
+                <div id="autoPremiumResult" class="premium-result">$0.00</div>
+                
+                <p>This is an estimated annual premium based on the information provided.</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="autoAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleAutoDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="autoDetailsSection" class="details-section hidden">
+                    <h3>Premium Calculation Breakdown</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Base Value</th>
+                                <th>Multiplier</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="autoDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums may vary based on detailed underwriting criteria, additional risk factors, and current FSRA regulations. Please consult an insurance professional for a final quote.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Life Insurance Section -->
+    <div id="lifeSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Life Insurance Calculator</h2>
+                
+                <div class="tab-navigation">
+                    <button class="tab-button active" data-tab="termLife">Term Life</button>
+                    <button class="tab-button" data-tab="wholeLife">Whole Life</button>
+                    <button class="tab-button" data-tab="universalLife">Universal Life</button>
+                </div>
+                
+                <div id="termLife" class="tab-content active">
+                    <div class="form-group">
+                        <label for="lifeAge">Age:</label>
+                        <input type="number" id="lifeAge" min="18" max="80" value="35">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lifeGender">Gender:</label>
+                        <select id="lifeGender">
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="X">Non-binary/Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lifeSmoker">Smoking Status:</label>
+                        <select id="lifeSmoker">
+                            <option value="non-smoker">Non-smoker</option>
+                            <option value="smoker">Smoker</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lifeCoverageAmount">Coverage Amount:</label>
+                        <input type="number" id="lifeCoverageAmount" min="10000" step="10000" value="500000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lifeTerm">Term Length:</label>
+                        <select id="lifeTerm">
+                            <option value="10">10 Years</option>
+                            <option value="20" selected>20 Years</option>
+                            <option value="30">30 Years</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lifeHealth">Health Status:</label>
+                        <select id="lifeHealth">
+                            <option value="excellent">Excellent</option>
+                            <option value="good" selected>Good</option>
+                            <option value="average">Average</option>
+                            <option value="poor">Poor</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="wholeLife" class="tab-content hidden">
+                    <!-- Whole Life specific fields -->
+                    <div class="form-group">
+                        <label for="wholeLifeAge">Age:</label>
+                        <input type="number" id="wholeLifeAge" min="18" max="80" value="35">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wholeLifeGender">Gender:</label>
+                        <select id="wholeLifeGender">
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="X">Non-binary/Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wholeLifeSmoker">Smoking Status:</label>
+                        <select id="wholeLifeSmoker">
+                            <option value="non-smoker">Non-smoker</option>
+                            <option value="smoker">Smoker</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wholeLifeCoverageAmount">Coverage Amount:</label>
+                        <input type="number" id="wholeLifeCoverageAmount" min="25000" step="25000" value="500000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="wholeLifePayPeriod">Payment Period:</label>
+                        <select id="wholeLifePayPeriod">
+                            <option value="life">Lifetime</option>
+                            <option value="20pay">20 Year Pay</option>
+                            <option value="10pay">10 Year Pay</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="universalLife" class="tab-content hidden">
+                    <!-- Universal Life specific fields -->
+                    <div class="form-group">
+                        <label for="universalLifeAge">Age:</label>
+                        <input type="number" id="universalLifeAge" min="18" max="80" value="35">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="universalLifeCoverageAmount">Coverage Amount:</label>
+                        <input type="number" id="universalLifeCoverageAmount" min="100000" step="50000" value="500000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="universalLifeInvestmentOption">Investment Option:</label>
+                        <select id="universalLifeInvestmentOption">
+                            <option value="conservative">Conservative</option>
+                            <option value="balanced" selected>Balanced</option>
+                            <option value="aggressive">Aggressive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="universalLifeMonthlyDeposit">Monthly Deposit (Above Minimum):</label>
+                        <input type="number" id="universalLifeMonthlyDeposit" min="0" step="50" value="200">
+                    </div>
+                </div>
+                
+                <button id="calculateLifeBtn">Calculate Premium</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Estimated Life Insurance Premium</h2>
+                
+                <div id="lifePremiumResult" class="premium-result">$0.00</div>
+                <p><span id="lifePremiumFrequency">Monthly</span> premium estimate</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="lifeAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleLifeDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="lifeDetailsSection" class="details-section hidden">
+                    <h3>Premium Calculation Breakdown</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Base Value</th>
+                                <th>Multiplier</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lifeDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Value Projection</h3>
+                    <canvas id="lifeChart"></canvas>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums may vary based on detailed underwriting criteria, medical examinations, and current Canadian regulations. Please consult an insurance professional for a final quote.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- TFSA Section -->
+    <div id="tfsaSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>TFSA Investment Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="tfsaCurrentAge">Current Age:</label>
+                    <input type="number" id="tfsaCurrentAge" min="18" max="99" value="30">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tfsaRetirementAge">Target Retirement Age:</label>
+                    <input type="number" id="tfsaRetirementAge" min="45" max="99" value="65">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tfsaCurrentBalance">Current TFSA Balance (CAD):</label>
+                    <input type="number" id="tfsaCurrentBalance" min="0" value="10000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tfsaAnnualContribution">Annual Contribution (CAD):</label>
+                    <input type="number" id="tfsaAnnualContribution" min="0" max="7000" value="6000">
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">The 2025 TFSA annual contribution limit is $7,000. Your personal limit may vary based on unused contribution room from previous years.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tfsaInvestmentStyle">Investment Style:</label>
+                    <select id="tfsaInvestmentStyle">
+                        <option value="conservative">Conservative (Lower risk, ~4% return)</option>
+                        <option value="balanced" selected>Balanced (Moderate risk, ~6% return)</option>
+                        <option value="aggressive">Aggressive (Higher risk, ~8% return)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tfsaInflationRate">Expected Inflation Rate (%):</label>
+                    <input type="number" id="tfsaInflationRate" min="0" max="10" step="0.1" value="2.0">
+                </div>
+                
+                <button id="calculateTfsaBtn">Calculate Projection</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>TFSA Projection Results</h2>
+                
+                <div id="tfsaProjectionResult" class="premium-result">$0.00</div>
+                <p>Projected TFSA balance at retirement (in today's dollars)</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="tfsaAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleTfsaDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="tfsaDetailsSection" class="details-section hidden">
+                    <h3>Projection Details</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Age</th>
+                                <th>Annual Contribution</th>
+                                <th>Investment Returns</th>
+                                <th>Year-End Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tfsaDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>TFSA Growth Projection</h3>
+                    <canvas id="tfsaChart"></canvas>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual returns will vary based on investment performance, market conditions, and changes to TFSA regulations. Past performance is not indicative of future results.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Health Insurance Section -->
+    <div id="healthSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Health Insurance Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="healthAge">Age:</label>
+                    <input type="number" id="healthAge" min="18" max="99" value="35">
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthProvince">Province:</label>
+                    <select id="healthProvince">
+                        <option value="ON" selected>Ontario</option>
+                        <option value="BC">British Columbia</option>
+                        <option value="AB">Alberta</option>
+                        <option value="QC">Quebec</option>
+                        <option value="MB">Manitoba</option>
+                        <option value="SK">Saskatchewan</option>
+                        <option value="NS">Nova Scotia</option>
+                        <option value="NB">New Brunswick</option>
+                        <option value="NL">Newfoundland and Labrador</option>
+                        <option value="PE">Prince Edward Island</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthCoverage">Coverage Type:</label>
+                    <select id="healthCoverage">
+                        <option value="individual">Individual</option>
+                        <option value="couple">Couple</option>
+                        <option value="family">Family</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthMedicalHistory">Medical History:</label>
+                    <select id="healthMedicalHistory">
+                        <option value="excellent">Excellent - No conditions</option>
+                        <option value="good" selected>Good - Minor conditions</option>
+                        <option value="average">Average - Some managed conditions</option>
+                        <option value="poor">Poor - Multiple conditions</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Coverage Options:</label>
+                    <div class="coverage-options">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="healthDental" checked>
+                            <label for="healthDental">Dental</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="healthVision" checked>
+                            <label for="healthVision">Vision</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="healthPrescription" checked>
+                            <label for="healthPrescription">Prescription Drugs</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="healthParamedical" checked>
+                            <label for="healthParamedical">Paramedical Services</label>
+                        </div>
+                        
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="healthHospital">
+                            <label for="healthHospital">Hospital Room Upgrade</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthDeductible">Annual Deductible (CAD):</label>
+                    <select id="healthDeductible">
+                        <option value="0">$0</option>
+                        <option value="250">$250</option>
+                        <option value="500" selected>$500</option>
+                        <option value="1000">$1,000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="healthCoinsurance">Coinsurance Rate:</label>
+                    <select id="healthCoinsurance">
+                        <option value="100">100% (Insurance pays all)</option>
+                        <option value="80" selected>80% (You pay 20%)</option>
+                        <option value="70">70% (You pay 30%)</option>
+                    </select>
+                </div>
+                
+                <button id="calculateHealthBtn">Calculate Premium</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Estimated Health Insurance Premium</h2>
+                
+                <div id="healthPremiumResult" class="premium-result">$0.00</div>
+                <p>Monthly premium estimate</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="healthAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleHealthDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="healthDetailsSection" class="details-section hidden">
+                    <h3>Premium Calculation Breakdown</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Coverage Component</th>
+                                <th>Base Premium</th>
+                                <th>Adjustments</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="healthDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums will vary based on specific health plan details, provincial regulations, and individual medical assessments. Please consult with a licensed insurance advisor for final pricing.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Critical Illness Section -->
+    <div id="criticalIllnessSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Critical Illness Insurance Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="ciAge">Age:</label>
+                    <input type="number" id="ciAge" min="18" max="70" value="40">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciGender">Gender:</label>
+                    <select id="ciGender">
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="X">Non-binary/Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciSmoker">Smoking Status:</label>
+                    <select id="ciSmoker">
+                        <option value="non-smoker">Non-smoker</option>
+                        <option value="smoker">Smoker</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciCoverageAmount">Coverage Amount (CAD):</label>
+                    <input type="number" id="ciCoverageAmount" min="10000" step="10000" value="100000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciTerm">Term Length:</label>
+                    <select id="ciTerm">
+                        <option value="10">10 Years</option>
+                        <option value="15">15 Years</option>
+                        <option value="20" selected>20 Years</option>
+                        <option value="life65">To Age 65</option>
+                        <option value="life75">To Age 75</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciMedicalHistory">Family Medical History:</label>
+                    <select id="ciMedicalHistory">
+                        <option value="none">No history of critical illnesses</option>
+                        <option value="some">Some history (one parent/sibling)</option>
+                        <option value="significant">Significant history (multiple relatives)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ciConditionsCovered">Conditions Covered:</label>
+                    <select id="ciConditionsCovered">
+                        <option value="basic">Basic (covers ~5 conditions)</option>
+                        <option value="standard" selected>Standard (covers ~15 conditions)</option>
+                        <option value="enhanced">Enhanced (covers ~25 conditions)</option>
+                    </select>
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">Basic typically covers heart attack, stroke, cancer. Standard adds conditions like blindness, deafness, and organ failure. Enhanced includes additional conditions like Parkinson's, MS, and Alzheimer's.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Optional Riders:</label>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ciReturnOfPremium">
+                        <label for="ciReturnOfPremium">Return of Premium (at maturity)</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ciChildRider">
+                        <label for="ciChildRider">Child Critical Illness Rider</label>
+                    </div>
+                </div>
+                
+                <button id="calculateCIBtn">Calculate Premium</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Estimated Critical Illness Premium</h2>
+                
+                <div id="ciPremiumResult" class="premium-result">$0.00</div>
+                <p>Monthly premium estimate</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="ciAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleCIDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="ciDetailsSection" class="details-section hidden">
+                    <h3>Premium Calculation Breakdown</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Base Value</th>
+                                <th>Multiplier</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ciDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums will vary based on detailed medical history and underwriting. Critical illness insurance is subject to medical approval and specific policy terms.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Disability Insurance Section -->
+    <div id="disabilitySection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Disability Insurance Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="diAge">Age:</label>
+                    <input type="number" id="diAge" min="18" max="60" value="35">
+                </div>
+                
+                <div class="form-group">
+                    <label for="diGender">Gender:</label>
+                    <select id="diGender">
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="X">Non-binary/Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diOccupation">Occupation Class:</label>
+                    <select id="diOccupation">
+                        <option value="4A">Class 4A - Professional (lowest risk)</option>
+                        <option value="3A">Class 3A - Professional/Technical</option>
+                        <option value="2A" selected>Class 2A - Skilled</option>
+                        <option value="A">Class A - Technical/Light Physical</option>
+                        <option value="B">Class B - Physical/Manual (highest risk)</option>
+                    </select>
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">Classes range from low risk (4A, ex: accountant, dentist) to higher risk (B, ex: construction worker, mechanic). Your occupation class affects your premium.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diAnnualIncome">Annual Income (CAD):</label>
+                    <input type="number" id="diAnnualIncome" min="20000" step="1000" value="75000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="diMonthlyBenefit">Monthly Benefit Amount (CAD):</label>
+                    <input type="number" id="diMonthlyBenefit" min="500" step="100" value="3000">
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">Typically, disability insurance covers 60-70% of your gross monthly income. Maximum is usually capped at 70% of income.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diBenefitPeriod">Benefit Period:</label>
+                    <select id="diBenefitPeriod">
+                        <option value="2year">2 Years</option>
+                        <option value="5year">5 Years</option>
+                        <option value="10year">10 Years</option>
+                        <option value="to65" selected>To Age 65</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="diWaitingPeriod">Waiting Period (Elimination Period):</label>
+                    <select id="diWaitingPeriod">
+                        <option value="30">30 Days</option>
+                        <option value="60">60 Days</option>
+                        <option value="90" selected>90 Days</option>
+                        <option value="180">180 Days</option>
+                        <option value="365">365 Days</option>
+                    </select>
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">This is the time between disability onset and when benefits begin. Longer waiting periods reduce premiums.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Optional Riders:</label>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="diOwnOccupation" checked>
+                        <label for="diOwnOccupation">Own Occupation Definition</label>
+                        <div class="tooltip">
+                            <span class="info-icon">i</span>
+                            <span class="tooltip-text">Pays benefits if you can't work in your specific occupation, even if you can work elsewhere.</span>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="diFutureIncome">
+                        <label for="diFutureIncome">Future Income Option</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="diCostOfLiving" checked>
+                        <label for="diCostOfLiving">Cost of Living Adjustment</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="diReturnOfPremium">
+                        <label for="diReturnOfPremium">Return of Premium</label>
+                    </div>
+                </div>
+                
+                <button id="calculateDIBtn">Calculate Premium</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Estimated Disability Insurance Premium</h2>
+                
+                <div id="diPremiumResult" class="premium-result">$0.00</div>
+                <p>Monthly premium estimate</p>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="diAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleDIDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="diDetailsSection" class="details-section hidden">
+                    <h3>Premium Calculation Breakdown</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Base Value</th>
+                                <th>Multiplier</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="diDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Income Protection</h3>
+                    <canvas id="diChart"></canvas>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual premiums depend on occupation, medical history, and detailed underwriting. Disability insurance policies vary significantly, and benefits are subject to specific policy terms and conditions.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Retirement Planning Section -->
+    <div id="retirementSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Retirement Planning Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="retAge">Current Age:</label>
+                    <input type="number" id="retAge" min="18" max="70" value="35">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retRetirementAge">Expected Retirement Age:</label>
+                    <input type="number" id="retRetirementAge" min="45" max="85" value="65">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retLifeExpectancy">Life Expectancy:</label>
+                    <input type="number" id="retLifeExpectancy" min="70" max="110" value="90">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retCurrentSalary">Current Annual Salary (CAD):</label>
+                    <input type="number" id="retCurrentSalary" min="20000" step="1000" value="75000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retSalaryIncrease">Expected Annual Salary Increase (%):</label>
+                    <input type="number" id="retSalaryIncrease" min="0" max="10" step="0.1" value="2.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retCurrentSavings">Current Retirement Savings (CAD):</label>
+                    <input type="number" id="retCurrentSavings" min="0" step="1000" value="50000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retMonthlySavings">Monthly Contributions (CAD):</label>
+                    <input type="number" id="retMonthlySavings" min="0" step="50" value="500">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retDesiredIncome">Desired Retirement Income (% of final salary):</label>
+                    <input type="number" id="retDesiredIncome" min="30" max="100" value="70">
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">Financial advisors typically recommend aiming for 70-80% of your pre-retirement income to maintain your standard of living.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="retInvestmentReturn">Expected Investment Return (%):</label>
+                    <input type="number" id="retInvestmentReturn" min="1" max="12" step="0.1" value="6.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retInflationRate">Expected Inflation Rate (%):</label>
+                    <input type="number" id="retInflationRate" min="0" max="8" step="0.1" value="2.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="retCPP">Include CPP/QPP Estimates:</label>
+                    <select id="retCPP">
+                        <option value="no">No</option>
+                        <option value="yes" selected>Yes</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="retOAS">Include OAS Estimates:</label>
+                    <select id="retOAS">
+                        <option value="no">No</option>
+                        <option value="yes" selected>Yes</option>
+                    </select>
+                </div>
+                
+                <button id="calculateRetirementBtn">Calculate Projection</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>Retirement Planning Results</h2>
+                
+                <div id="retirementResult" class="premium-result">$0.00</div>
+                <p>Projected retirement savings at age <span id="retResultAge">65</span></p>
+                
+                <div id="retirementGapSection" class="warning">
+                    <strong>Retirement Gap:</strong> <span id="retirementGap">$0</span>
+                </div>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="retirementAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleRetirementDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="retirementDetailsSection" class="details-section hidden">
+                    <h3>Projection Details</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Age</th>
+                                <th>Annual Savings</th>
+                                <th>Investment Returns</th>
+                                <th>Year-End Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="retirementDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Retirement Savings Projection</h3>
+                    <canvas id="retirementChart"></canvas>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual outcomes will vary based on investment performance, inflation rates, and changes to government programs. Review your retirement plan regularly with a qualified financial advisor.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- RESP Section -->
+    <div id="respSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>RESP Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="respChildAge">Child's Current Age:</label>
+                    <input type="number" id="respChildAge" min="0" max="17" value="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="respCurrentBalance">Current RESP Balance (CAD):</label>
+                    <input type="number" id="respCurrentBalance" min="0" step="500" value="5000">
+                </div>
+                
+                <div class="form-group">
+                    <label for="respYearlyContribution">Annual Contribution (CAD):</label>
+                    <input type="number" id="respYearlyContribution" min="0" max="50000" step="500" value="2500">
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">$2,500 annually maximizes the Canadian Education Savings Grant (CESG) of $500 per year. Lifetime contribution limit is $50,000 per beneficiary.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="respInvestmentReturn">Expected Investment Return (%):</label>
+                    <input type="number" id="respInvestmentReturn" min="1" max="10" step="0.1" value="5.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="respEducationCost">Expected Annual Education Cost (CAD):</label>
+                    <input type="number" id="respEducationCost" min="5000" step="1000" value="20000">
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">Includes tuition, books, housing, and living expenses. Average annual cost for domestic undergraduate students is approximately $20,000-$30,000.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="respEducationInflation">Education Cost Inflation (%):</label>
+                    <input type="number" id="respEducationInflation" min="1" max="8" step="0.1" value="3.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="respEducationDuration">Years of Post-Secondary Education:</label>
+                    <select id="respEducationDuration">
+                        <option value="2">2 Years (College Diploma)</option>
+                        <option value="3">3 Years (Advanced Diploma)</option>
+                        <option value="4" selected>4 Years (Bachelor's Degree)</option>
+                        <option value="6">6+ Years (Professional/Graduate Degree)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="respCESG">Include CESG (20% of contributions, up to $500/year):</label>
+                    <select id="respCESG">
+                        <option value="no">No</option>
+                        <option value="yes" selected>Yes</option>
+                    </select>
+                </div>
+                
+                <button id="calculateRespBtn">Calculate Projection</button>
+            </section>
+            
+            <section class="results-section">
+                <h2>RESP Projection Results</h2>
+                
+                <div id="respProjectionResult" class="premium-result">$0.00</div>
+                <p>Projected RESP balance at age 18</p>
+                
+                <div id="respCoverageSection">
+                    <p>This will cover approximately <span id="respCoveragePercent">0%</span> of the total estimated education costs.</p>
+                </div>
+                
+                <div class="assumptions-list">
+                    <h4>Key Assumptions</h4>
+                    <ul id="respAssumptionsList">
+                        <!-- Assumptions will be added here -->
+                    </ul>
+                </div>
+                
+                <button id="toggleRespDetails" class="toggle-details">Show calculation details</button>
+                
+                <div id="respDetailsSection" class="details-section hidden">
+                    <h3>Projection Details</h3>
+                    <table class="details-table">
+                        <thead>
+                            <tr>
+                                <th>Age</th>
+                                <th>Annual Contribution</th>
+                                <th>CESG</th>
+                                <th>Investment Returns</th>
+                                <th>Year-End Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="respDetailsTable">
+                            <!-- Details will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>RESP Growth vs. Education Costs</h3>
+                    <canvas id="respChart"></canvas>
+                </div>
+                
+                <div class="warning">
+                    <strong>Important:</strong> This calculator provides estimates only. Actual outcomes will vary based on investment performance, education inflation rates, and changes to RESP regulations and grants. The CESG has a lifetime maximum of $7,200 per beneficiary.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Travel Insurance Section -->
+    <div id="travelSection" class="product-section">
+        <div class="calculator-container">
+            <section class="input-section">
+                <h2>Travel Insurance Calculator</h2>
+                
+                <div class="form-group">
+                    <label for="travelAge">Age:</label>
+                    <input type="number" id="travelAge" min="0" max="99" value="45">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelDestination">Destination:</label>
+                    <select id="travelDestination">
+                        <option value="USA">United States</option>
+                        <option value="Europe">Europe</option>
+                        <option value="Mexico">Mexico/Caribbean</option>
+                        <option value="Asia">Asia</option>
+                        <option value="Australia">Australia/New Zealand</option>
+                        <option value="SouthAmerica">South America</option>
+                        <option value="Africa">Africa</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelDuration">Trip Duration (days):</label>
+                    <input type="number" id="travelDuration" min="1" max="365" value="14">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelParty">Number of Travelers:</label>
+                    <input type="number" id="travelParty" min="1" max="10" value="2">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelCoverage">Coverage Amount:</label>
+                    <select id="travelCoverage">
+                        <option value="1000000">$1,000,000</option>
+                        <option value="2000000">$2,000,000</option>
+                        <option value="5000000" selected>$5,000,000</option>
+                        <option value="10000000">$10,000,000</option>
+                    </select>
+                    <div class="tooltip">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-text">For US travel, a minimum of $5,000,000 is recommended due to high healthcare costs.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelDeductible">Deductible Amount (CAD):</label>
+                    <select id="travelDeductible">
+                        <option value="0">$0</option>
+                        <option value="100" selected>$100</option>
+                        <option value="250">$250</option>
+                        <option value="500">$500</option>
+                        <option value="1000">$1,000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="travelMedicalConditions">Pre-existing Medical Conditions:</label>
+                    <select id="travelMedicalConditions">
+                        <option value="none">None</option>
+                        <option value="stable">Stable (under control for 3+ months)</option>
+                        <option value="recent">Recent (changes in last 3 months)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Additional Coverage Options:</label>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="travelTrip" checked>
+                        <label for="travelTrip">Trip Cancellation/Interruption</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="travelLuggage" checked>
+                        <label for="travelLuggage">Baggage Loss/Delay</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="travelActivities">
+                        <label for="travelActiv
