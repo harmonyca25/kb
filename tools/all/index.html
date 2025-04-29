@@ -160,22 +160,93 @@
         </div>
     </section>
 
-    <!-- Life Insurance Section (placeholder) -->
-    <section id="lifeSection" class="product-section">
-        <div class="calculator-container">
-            <div class="input-section">
-                <h2>Life Insurance Calculator</h2>
-                <p class="placeholder-message">Life insurance calculator will be implemented in the next phase.</p>
-                <!-- Life insurance form fields will go here -->
-            </div>
-            
-            <div class="results-section">
-                <h2>Estimated Life Insurance Premium</h2>
-                <p class="placeholder-message">Results will appear here after implementation.</p>
-                <!-- Life insurance results will go here -->
-            </div>
-        </div>
-    </section>
+ 
+    <!-- Life Insurance Section -->
+<section id="lifeSection" class="product-section">
+  <div class="calculator-container">
+
+    <!-- Inputs -->
+    <div class="input-section">
+      <h2>Life Insurance Calculator</h2>
+
+      <div class="form-group">
+        <label for="lifeAge">Your Age:</label>
+        <input type="number" id="lifeAge" min="18" max="99" value="30">
+      </div>
+
+      <div class="form-group">
+        <label for="lifeSmoker">Smoker Status:</label>
+        <select id="lifeSmoker">
+          <option value="no" selected>Non-Smoker</option>
+          <option value="yes">Smoker</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="lifeSumAssured">Sum Assured (CAD):</label>
+        <input type="number" id="lifeSumAssured" min="10000" step="10000" value="100000">
+      </div>
+
+      <div class="form-group">
+        <label for="lifeTerm">Term Length (years):</label>
+        <select id="lifeTerm">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20" selected>20</option>
+          <option value="25">25</option>
+          <option value="30">30</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="lifeHealthRating">Health Rating:</label>
+        <select id="lifeHealthRating">
+          <option value="preferred">Preferred</option>
+          <option value="standard" selected>Standard</option>
+          <option value="substandard">Substandard</option>
+        </select>
+      </div>
+
+      <button id="calculateLifeBtn" class="calculate-btn">Calculate Premium</button>
+    </div>
+
+    <!-- Results -->
+    <div class="results-section">
+      <h2>Estimated Life Insurance Premium</h2>
+
+      <div id="lifePremiumResult" class="premium-result">$0.00</div>
+
+      <div class="assumptions-list">
+        <h4>Key Assumptions</h4>
+        <ul id="lifeAssumptionsList"></ul>
+      </div>
+
+      <button id="toggleLifeDetails" class="toggle-details">Show calculation details</button>
+
+      <div id="lifeDetailsSection" class="details-section hidden">
+        <h3>Calculation Breakdown</h3>
+        <table class="details-table">
+          <thead>
+            <tr>
+              <th>Factor</th><th>Base Value</th><th>Multiplier</th><th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="lifeDetailsTable"></tbody>
+        </table>
+      </div>
+
+      <div class="warning">
+        <strong>Important:</strong> Estimates only—actual premiums depend on full underwriting and FSRA rules.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Scripts: load module first, then main.js -->
+<script src="js/lifeCalc.js"></script>
+<script src="js/main.js"></script>
+
 
     
     <!-- Health Insurance Section -->
