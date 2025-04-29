@@ -7,11 +7,18 @@
 // Wait for DOM content to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all modules
-    initProductSelector();
-    initAutoInsurance();
-    initHealthInsurance(); // Added health insurance module
-    initLifeInsurance(); // Added life insurance module
-    initRegulatoryInfo();
+   initProductSelector();
+initAutoInsurance();
+initHealthInsurance();
+initLifeInsurance();
+initCriticalIllnessInsurance();
+initDisabilityInsurance();
+initRetirementPlanning();
+initTFSA();
+initRESP();
+initTravelInsurance();
+initRegulatoryInfo();
+
 });
 
 /**
