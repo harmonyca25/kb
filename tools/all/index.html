@@ -177,8 +177,145 @@
         </div>
     </section>
 
-    <!-- Other product sections will follow the same pattern -->
+    
+    <!-- Health Insurance Section -->
+<section id="healthSection" class="product-section">
+    <div class="calculator-container">
+        <div class="input-section">
+            <h2>Health Insurance Calculator</h2>
+            
+            <div class="form-group">
+                <label for="healthAge">Age:</label>
+                <input type="number" id="healthAge" min="18" max="99" value="35">
+            </div>
+            
+            <div class="form-group">
+                <label for="healthProvince">Province:</label>
+                <select id="healthProvince">
+                    <option value="ON" selected>Ontario</option>
+                    <option value="BC">British Columbia</option>
+                    <option value="AB">Alberta</option>
+                    <option value="QC">Quebec</option>
+                    <option value="MB">Manitoba</option>
+                    <option value="SK">Saskatchewan</option>
+                    <option value="NS">Nova Scotia</option>
+                    <option value="NB">New Brunswick</option>
+                    <option value="NL">Newfoundland and Labrador</option>
+                    <option value="PE">Prince Edward Island</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="healthCoverage">Coverage Type:</label>
+                <select id="healthCoverage">
+                    <option value="individual">Individual</option>
+                    <option value="couple">Couple</option>
+                    <option value="family">Family</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="healthMedicalHistory">Medical History:</label>
+                <select id="healthMedicalHistory">
+                    <option value="excellent">Excellent - No conditions</option>
+                    <option value="good" selected>Good - Minor conditions</option>
+                    <option value="average">Average - Some managed conditions</option>
+                    <option value="poor">Poor - Multiple conditions</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Coverage Options:</label>
+                <div class="coverage-options">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="healthDental" checked>
+                        <label for="healthDental">Dental</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="healthVision" checked>
+                        <label for="healthVision">Vision</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="healthPrescription" checked>
+                        <label for="healthPrescription">Prescription Drugs</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="healthParamedical" checked>
+                        <label for="healthParamedical">Paramedical Services</label>
+                    </div>
+                    
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="healthHospital">
+                        <label for="healthHospital">Hospital Room Upgrade</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="healthDeductible">Annual Deductible (CAD):</label>
+                <select id="healthDeductible">
+                    <option value="0">$0</option>
+                    <option value="250">$250</option>
+                    <option value="500" selected>$500</option>
+                    <option value="1000">$1,000</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="healthCoinsurance">Coinsurance Rate:</label>
+                <select id="healthCoinsurance">
+                    <option value="100">100% (Insurance pays all)</option>
+                    <option value="80" selected>80% (You pay 20%)</option>
+                    <option value="70">70% (You pay 30%)</option>
+                </select>
+            </div>
+            
+            <button id="calculateHealthBtn" class="calculate-btn">Calculate Premium</button>
+        </div>
+        
+        <div class="results-section">
+            <h2>Estimated Health Insurance Premium</h2>
+            
+            <div id="healthPremiumResult" class="premium-result">$0.00</div>
+            <p>Monthly premium estimate</p>
+            
+            <div class="assumptions-list">
+                <h4>Key Assumptions</h4>
+                <ul id="healthAssumptionsList">
+                    <!-- Assumptions will be added here -->
+                </ul>
+            </div>
+            
+            <button id="toggleHealthDetails" class="toggle-details">Show calculation details</button>
+            
+            <div id="healthDetailsSection" class="details-section hidden">
+                <h3>Premium Calculation Breakdown</h3>
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Coverage Component</th>
+                            <th>Base Premium</th>
+                            <th>Adjustments</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="healthDetailsTable">
+                        <!-- Details will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Other product sections will follow the same pattern -->
     <!-- Each product will be implemented one by one -->
+            
+            <div class="warning">
+                <strong>Important:</strong> This calculator provides estimates only. Actual premiums will vary based on specific health plan details, provincial regulations, and individual medical assessments. Please consult with a licensed insurance advisor for final pricing.
+            </div>
+        </div>
+    </div>
+</section>
 
     <footer class="disclaimer">
         <h3>Regulatory Compliance</h3>
