@@ -1,6 +1,7 @@
 /**
  * Insurance & Financial Planning Calculator
  * Main JavaScript file with core functionality
+ * Now includes both Auto and Health Insurance modules
  */
 
 // Wait for DOM content to be fully loaded
@@ -8,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all modules
     initProductSelector();
     initAutoInsurance();
+    initHealthInsurance(); // Added health insurance module
     initRegulatoryInfo();
 });
 
@@ -382,6 +384,314 @@ function initAutoInsurance() {
 }
 
 /**
+ * Health Insurance Calculator Module
+ */
+function initHealthInsurance() {
+    // Initialize calculation data stores
+    window.healthCalculationDetails = [];
+    window.healthAssumptions = [];
+    
+    // Data constants for calculations
+    const DATA = {
+        // Base rates for different coverages
+        baseRates: {
+            'individual': 120,
+            'couple': 210,
+            'family': 280
+        },
+        
+        // Provincial factors
+        provincialFactors: {
+            'ON': 1.00, // Ontario (baseline)
+            'BC': 1.05, // British Columbia
+            'AB': 0.95, // Alberta
+            'QC': 1.10, // Quebec
+            'MB': 0.90, // Manitoba
+            'SK': 0.90, // Saskatchewan
+            'NS': 1.15, // Nova Scotia
+            'NB': 1.10, // New Brunswick
+            'NL': 1.15, // Newfoundland and Labrador
+            'PE': 1.10  // Prince Edward Island
+        },
+        
+        // Age-based risk factors
+        ageFactors: {
+            18: 0.70, 25: 0.75, 30: 0.80, 35: 0.85, 40: 0.90, 
+            45: 1.00, 50: 1.10, 55: 1.20, 60: 1.35, 65: 1.50, 
+            70: 1.70, 75: 2.00, 80: 2.30, 85: 2.70
+        },
+        
+        // Medical history factors
+        medicalFactors: {
+            'excellent': 0.90,
+            'good': 1.00,
+            'average': 1.15,
+            'poor': 1.40
+        },
+        
+        // Coverage component costs
+        coverageCosts: {
+            'dental': 35,
+            'vision': 15,
+            'prescription': 40,
+            'paramedical': 30,
+            'hospital': 25
+        },
+        
+        // Deductible adjustment factors
+        deductibleFactors: {
+            '0': 1.15,
+            '250': 1.05,
+            '500': 1.00,
+            '1000': 0.90
+        },
+        
+        // Coinsurance adjustment factors
+        coinsuranceFactors: {
+            '100': 1.10,
+            '80': 1.00,
+            '70': 0.95
+        }
+    };
+    
+    // Set up event listeners
+    const calculateBtn = document.getElementById('calculateHealthBtn');
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', calculateHealthPremium);
+    }
+    
+    const toggleDetailsBtn = document.getElementById('toggleHealthDetails');
+    if (toggleDetailsBtn) {
+        toggleDetailsBtn.addEventListener('click', function() {
+            const detailsSection = document.getElementById('healthDetailsSection');
+            if (detailsSection) {
+                if (detailsSection.classList.contains('hidden')) {
+                    detailsSection.classList.remove('hidden');
+                    this.textContent = 'Hide calculation details';
+                } else {
+                    detailsSection.classList.add('hidden');
+                    this.textContent = 'Show calculation details';
+                }
+            }
+        });
+    }
+    
+    // Initialize with a calculation
+    calculateHealthPremium();
+    
+    /**
+     * Helper function for age interpolation
+     */
+    function getAgeAdjustmentFactor(age) {
+        const ageFactors = DATA.ageFactors;
+        const ages = Object.keys(ageFactors).map(Number).sort((a, b) => a - b);
+        
+        if (age <= ages[0]) return ageFactors[ages[0]];
+        if (age >= ages[ages.length - 1]) return ageFactors[ages[ages.length - 1]];
+        
+        let lowerAge = ages.filter(a => a <= age).pop();
+        let upperAge = ages.filter(a => a > age)[0];
+        
+        let lowerFactor = ageFactors[lowerAge];
+        let upperFactor = ageFactors[upperAge];
+        let ratio = (age - lowerAge) / (upperAge - lowerAge);
+        
+        return lowerFactor + ratio * (upperFactor - lowerFactor);
+    }
+    
+    /**
+     * Main function to calculate health insurance premium
+     */
+    function calculateHealthPremium() {
+        // Reset calculation details and assumptions
+        window.healthCalculationDetails = [];
+        window.healthAssumptions = [];
+        
+        // Get input values
+        const age = parseInt(document.getElementById('healthAge').value) || 35;
+        const province = document.getElementById('healthProvince').value;
+        const coverageType = document.getElementById('healthCoverage').value;
+        const medicalHistory = document.getElementById('healthMedicalHistory').value;
+        const deductible = document.getElementById('healthDeductible').value;
+        const coinsurance = document.getElementById('healthCoinsurance').value;
+        
+        // Get selected coverage options
+        const isDentalCovered = document.getElementById('healthDental').checked;
+        const isVisionCovered = document.getElementById('healthVision').checked;
+        const isPrescriptionCovered = document.getElementById('healthPrescription').checked;
+        const isParamedicalCovered = document.getElementById('healthParamedical').checked;
+        const isHospitalCovered = document.getElementById('healthHospital').checked;
+        
+        // Calculate base premium based on coverage type
+        const basePremium = DATA.baseRates[coverageType];
+        
+        window.healthCalculationDetails.push({
+            factor: 'Base Premium',
+            baseValue: `$${basePremium.toFixed(2)}`,
+            multiplier: '1.00',
+            subtotal: `$${basePremium.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`${capitalizeFirstLetter(coverageType)} coverage in ${province}.`);
+        
+        // Apply provincial factor
+        const provincialFactor = DATA.provincialFactors[province];
+        const provincialAdjusted = basePremium * provincialFactor;
+        
+        window.healthCalculationDetails.push({
+            factor: `${province} Provincial Factor`,
+            baseValue: `$${basePremium.toFixed(2)}`,
+            multiplier: provincialFactor.toFixed(2),
+            subtotal: `$${provincialAdjusted.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`Provincial adjustment factor of ${provincialFactor.toFixed(2)} for ${province}.`);
+        
+        // Apply age adjustment
+        const ageFactor = getAgeAdjustmentFactor(age);
+        const ageAdjusted = provincialAdjusted * ageFactor;
+        
+        window.healthCalculationDetails.push({
+            factor: 'Age Adjustment',
+            baseValue: `$${provincialAdjusted.toFixed(2)}`,
+            multiplier: ageFactor.toFixed(2),
+            subtotal: `$${ageAdjusted.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`Age ${age} has an adjustment factor of ${ageFactor.toFixed(2)}.`);
+        
+        // Apply medical history factor
+        const medicalFactor = DATA.medicalFactors[medicalHistory];
+        const medicalAdjusted = ageAdjusted * medicalFactor;
+        
+        window.healthCalculationDetails.push({
+            factor: 'Medical History',
+            baseValue: `$${ageAdjusted.toFixed(2)}`,
+            multiplier: medicalFactor.toFixed(2),
+            subtotal: `$${medicalAdjusted.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`${capitalizeFirstLetter(medicalHistory)} medical history applied a factor of ${medicalFactor.toFixed(2)}.`);
+        
+        // Add optional coverages
+        let totalPremium = medicalAdjusted;
+        
+        // Add dental coverage if selected
+        if (isDentalCovered) {
+            const dentalCost = DATA.coverageCosts.dental;
+            totalPremium += dentalCost;
+            
+            window.healthCalculationDetails.push({
+                factor: 'Dental Coverage',
+                baseValue: `$${medicalAdjusted.toFixed(2)}`,
+                multiplier: `+ $${dentalCost.toFixed(2)}`,
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            window.healthAssumptions.push(`Dental coverage includes: cleanings, fillings, extractions, and 50% coverage for major procedures.`);
+        }
+        
+        // Add vision coverage if selected
+        if (isVisionCovered) {
+            const visionCost = DATA.coverageCosts.vision;
+            const priorPremium = totalPremium;
+            totalPremium += visionCost;
+            
+            window.healthCalculationDetails.push({
+                factor: 'Vision Coverage',
+                baseValue: `$${priorPremium.toFixed(2)}`,
+                multiplier: `+ $${visionCost.toFixed(2)}`,
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            window.healthAssumptions.push(`Vision coverage includes: eye exams, glasses/contacts allowance every 24 months.`);
+        }
+        
+        // Add prescription drug coverage if selected
+        if (isPrescriptionCovered) {
+            const prescriptionCost = DATA.coverageCosts.prescription;
+            const priorPremium = totalPremium;
+            totalPremium += prescriptionCost;
+            
+            window.healthCalculationDetails.push({
+                factor: 'Prescription Drug Coverage',
+                baseValue: `$${priorPremium.toFixed(2)}`,
+                multiplier: `+ $${prescriptionCost.toFixed(2)}`,
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            window.healthAssumptions.push(`Prescription drug coverage includes: formulary drugs with ${coinsurance}% coinsurance.`);
+        }
+        
+        // Add paramedical coverage if selected
+        if (isParamedicalCovered) {
+            const paramedicalCost = DATA.coverageCosts.paramedical;
+            const priorPremium = totalPremium;
+            totalPremium += paramedicalCost;
+            
+            window.healthCalculationDetails.push({
+                factor: 'Paramedical Services',
+                baseValue: `$${priorPremium.toFixed(2)}`,
+                multiplier: `+ $${paramedicalCost.toFixed(2)}`,
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            window.healthAssumptions.push(`Paramedical services include: physiotherapy, chiropractic, massage therapy, and acupuncture.`);
+        }
+        
+        // Add hospital room upgrade if selected
+        if (isHospitalCovered) {
+            const hospitalCost = DATA.coverageCosts.hospital;
+            const priorPremium = totalPremium;
+            totalPremium += hospitalCost;
+            
+            window.healthCalculationDetails.push({
+                factor: 'Hospital Room Upgrade',
+                baseValue: `$${priorPremium.toFixed(2)}`,
+                multiplier: `+ $${hospitalCost.toFixed(2)}`,
+                subtotal: `$${totalPremium.toFixed(2)}`
+            });
+            
+            window.healthAssumptions.push(`Hospital room upgrade provides semi-private or private room accommodation.`);
+        }
+        
+        // Apply deductible adjustment
+        const deductibleFactor = DATA.deductibleFactors[deductible];
+        const deductibleAdjusted = totalPremium * deductibleFactor;
+        
+        window.healthCalculationDetails.push({
+            factor: `Deductible ($${deductible})`,
+            baseValue: `$${totalPremium.toFixed(2)}`,
+            multiplier: deductibleFactor.toFixed(2),
+            subtotal: `$${deductibleAdjusted.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`$${deductible} annual deductible applied a factor of ${deductibleFactor.toFixed(2)}.`);
+        
+        // Apply coinsurance adjustment
+        const coinsuranceFactor = DATA.coinsuranceFactors[coinsurance];
+        const finalPremium = deductibleAdjusted * coinsuranceFactor;
+        
+        window.healthCalculationDetails.push({
+            factor: `Coinsurance (${coinsurance}%)`,
+            baseValue: `$${deductibleAdjusted.toFixed(2)}`,
+            multiplier: coinsuranceFactor.toFixed(2),
+            subtotal: `$${finalPremium.toFixed(2)}`
+        });
+        
+        window.healthAssumptions.push(`${coinsurance}% coinsurance rate applied a factor of ${coinsuranceFactor.toFixed(2)}.`);
+        window.healthAssumptions.push(`Premium is subject to annual renewal and may change based on claims experience.`);
+        
+        // Display the result
+        document.getElementById('healthPremiumResult').textContent = `$${finalPremium.toFixed(2)}`;
+        
+        // Update assumptions list and details table
+        updateAssumptionsList('health');
+        updateDetailsTable('health');
+    }
+}
+
+/**
  * Regulatory Information Module
  */
 function initRegulatoryInfo() {
@@ -462,4 +772,11 @@ function updateDetailsTable(section) {
         
         detailsTable.appendChild(row);
     });
+}
+
+/**
+ * Helper function to capitalize first letter of a string
+ */
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
