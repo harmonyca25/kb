@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initProductSelector();
     initAutoInsurance();
     initHealthInsurance(); // Added health insurance module
+    initLifeInsurance(); // Added life insurance module
     initRegulatoryInfo();
 });
 
