@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harmonyplan.ca advertising know how</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; padding: 0; background: #f9f9f9; color: #333; }
+    h1 { text-align: center; }
+    .summary { margin-bottom: 20px; }
+    .collapsible { background-color: #2e5f43; color: white; cursor: pointer; padding: 15px; width: 100%; border: none; text-align: left; outline: none; font-size: 16px; border-radius: 4px; margin-top: 10px; }
+    .collapsible:after { content: '+'; float: right; }
+    .collapsible.active:after { content: '-'; }
+    .content { padding: 0 15px; display: none; overflow: hidden; background-color: white; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; }
+    .content ol, .content ul { margin: 10px 0 10px 20px; }
+    .content li { margin-bottom: 8px; }
+    .content a { color: #2e5f43; text-decoration: none; }
+    .content a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Harmonyplan.ca advertising know how</h1>
+  <p class="summary">This page gathers all essential resources for evaluating advertising channels—Facebook & Instagram (Meta Ads) and Google Ads—covering platform overviews, campaign setup, ad formats, targeting, auctions, budgeting, billing, policies, and optimization.</p>
+  <button type="button" class="collapsible">Core Areas to Understand Before Advertising</button>
+  <div class="content">
+    <ol>
+      <li><strong>Platform Overview & Objectives</strong>: Understand the advertising ecosystem, campaign objectives, and where your audience spends time.</li>
+      <li><strong>Account Structure & Setup</strong>: How to create accounts, ad accounts or manager accounts, and link assets (pages, pixels, billing profiles).</li>
+      <li><strong>Ad Formats & Creative Specs</strong>: Which formats (image, video, carousel, stories, search text, display banners, etc.) are available, and what their technical requirements are.</li>
+      <li><strong>Targeting Options</strong>: Demographic, interest, behavior, custom audiences, lookalikes (Meta) or keywords, topics, audiences, in-market segments (Google).</li>
+      <li><strong>Auction Mechanics & Bidding</strong>: How ads compete in real time, the role of quality/relevance scores, and which bidding strategies align with your goals.</li>
+      <li><strong>Budgeting & Cost Models</strong>: Setting daily vs. lifetime budgets, understanding cost-per-click (CPC), cost-per-thousand impressions (CPM), cost-per-action (CPA), and best practices for allocating spend.</li>
+      <li><strong>Billing & Payments</strong>: Payment thresholds, billing cycles, accepted payment methods, invoicing, and how to access statements.</li>
+      <li><strong>Policies & Compliance</strong>: Advertising standards, prohibited content, and appeal processes to ensure your ads aren’t disapproved.</li>
+      <li><strong>Measurement & Optimization Tools</strong>: Reporting dashboards, conversion tracking setups, analytics integrations, and automated recommendations.</li>
+    </ol>
+  </div>
+  <button type="button" class="collapsible">Facebook & Instagram (Meta Ads)</button>
+  <div class="content">
+    <ul>
+      <li><strong>Overview & Getting Started</strong><br><a href="https://www.facebook.com/business/ads">Meta Ads overview & basics</a></li>
+      <li><strong>Objectives & Campaign Goals</strong><br><a href="https://www.facebook.com/business/ads/ad-objectives">Ad Objectives Guide</a></li>
+      <li><strong>Formats & Creative Specs</strong><br><a href="https://www.facebook.com/business/ads-guide/update">Facebook Ads Guide (design specs)</a></li>
+      <li><strong>Targeting Options</strong><br><a href="https://www.facebook.com/business/ads/ad-targeting">Ad Targeting Options</a></li>
+      <li><strong>Auction & Pricing Mechanics</strong><br><a href="https://www.facebook.com/business/ads/ad-auction">Ad Auctions Explained</a></li>
+      <li><strong>Budgeting & Cost Control</strong><br><a href="https://www.facebook.com/business/ads/pricing">Budgets, Costs & Schedules</a></li>
+      <li><strong>Billing & Payments</strong><br><a href="https://www.facebook.com/business/help/1814143615511573">How to Pay for Meta Ads</a></li>
+      <li><strong>Policies & Compliance</strong><br><a href="https://www.facebook.com/policies/ads">Advertising Standards & Policies</a></li>
+    </ul>
+  </div>
+  <button type="button" class="collapsible">Google Ads</button>
+  <div class="content">
+    <ul>
+      <li><strong>Overview & Getting Started</strong><br><a href="https://support.google.com/google-ads/answer/6146252?hl=en">Your guide to Google Ads</a></li>
+      <li><strong>Advertising Policies</strong><br><a href="https://support.google.com/adspolicy/answer/6008942?hl=en">Google Ads Policies</a></li>
+      <li><strong>Campaign Setup & Basics</strong><br><a href="https://support.google.com/google-ads/answer/6167122?hl=en">Get started with Google Ads (Basics)</a></li>
+      <li><strong>Budgeting & Tips</strong><br><a href="https://support.google.com/google-ads/answer/10560629?hl=en">12 Tips for Advertising with Google Ads</a></li>
+      <li><strong>Bidding Strategies</strong><br><a href="https://support.google.com/google-ads/answer/2472725?hl=en">Determine a bid strategy based on your goals</a><br><a href="https://support.google.com/google-ads/answer/2979071?hl=en">About automated bidding</a></li>
+      <li><strong>Billing & Invoicing</strong><br><a href="https://support.google.com/google-ads/answer/1723045?hl=en">Get an invoice or payment receipt</a><br><a href="https://support.google.com/google-ads/answer/2497582?hl=en">Your Google Ads Billing page</a></li>
+      <li><strong>Expert Support</strong><br><a href="https://ads.google.com/intl/en_us/home/ads-experts-support/">Contact Google Ads Experts</a></li>
+    </ul>
+  </div>
+  <script>
+    document.querySelectorAll('.collapsible').forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.toggle('active');
+        const content = button.nextElementSibling;
+        if (content.style.display === 'block') {
+          content.style.display = 'none';
+        } else {
+          content.style.display = 'block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
